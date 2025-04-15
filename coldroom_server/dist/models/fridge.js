@@ -32,20 +32,27 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRoutes = void 0;
-const express_1 = __importDefault(require("express"));
-const userController = __importStar(require("../controllers/users"));
-const router = express_1.default.Router();
-const userRoutes = (app) => {
-    router.post('/create', userController.createUser);
-    router.post('/login', userController.loginUser);
-    router.get('/all', userController.getUsers);
-    router.delete('/delete/:id', userController.deleteUser);
-    router.put('/update/:id', userController.updatePassword);
-    return app.use('/users', router);
-};
-exports.userRoutes = userRoutes;
+const mongoose_1 = __importStar(require("mongoose"));
+const refrigeratorSchema = new mongoose_1.Schema({
+    name: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    capacity: {
+        type: Number,
+        required: true,
+    },
+    humiditymax: {
+        type: Number,
+    },
+    tempmax: {
+        type: Number,
+    },
+    refrigerator_type: {
+        type: String,
+    },
+});
+const Refrigerator = mongoose_1.default.model('Refrigerators', refrigeratorSchema);
+exports.default = Refrigerator;

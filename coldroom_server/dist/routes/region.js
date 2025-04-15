@@ -43,7 +43,7 @@ const router = express_1.default.Router();
 const regionRoutes = (app) => {
     router.post('', regionController.createRegion);
     router.get('', regionController.getRegions);
-    router.delete("", regionController.deleteRegion);
+    router.delete("/:id", regionController.deleteRegion);
     router.patch("/:id", regionController.updateRegion);
     return app.use('/regions', router);
 };

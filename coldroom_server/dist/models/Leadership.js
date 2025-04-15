@@ -9,8 +9,6 @@ const LeadershipSchema = new mongoose_1.Schema({
             position: { type: mongoose_1.Schema.Types.ObjectId, ref: "LeadershipPosition", required: true },
             category: { type: String, enum: ["CU", "Regional", "National"], required: true },
             department: { type: mongoose_1.Schema.Types.ObjectId, ref: "LeadershipDepartment" },
-            college: { type: mongoose_1.Schema.Types.ObjectId, ref: "College" },
-            region: { type: mongoose_1.Schema.Types.ObjectId, ref: "Region" },
             term_start: { type: Date, required: true, default: Date.now },
             term_end: { type: Date, required: true, default: () => new Date(new Date().setFullYear(new Date().getFullYear() + 1)) },
             banned: { type: Boolean, default: false },

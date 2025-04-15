@@ -36,16 +36,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRoutes = void 0;
+exports.allLogs = void 0;
 const express_1 = __importDefault(require("express"));
-const userController = __importStar(require("../controllers/users"));
+const LogsController = __importStar(require("../controllers/Logs"));
 const router = express_1.default.Router();
-const userRoutes = (app) => {
-    router.post('/create', userController.createUser);
-    router.post('/login', userController.loginUser);
-    router.get('/all', userController.getUsers);
-    router.delete('/delete/:id', userController.deleteUser);
-    router.put('/update/:id', userController.updatePassword);
-    return app.use('/users', router);
+const allLogs = (app) => {
+    router.post("", LogsController.saveLog);
+    router.get("/table", LogsController.getLogsTable);
+    return app.use('/alllogs', router);
 };
-exports.userRoutes = userRoutes;
+exports.allLogs = allLogs;
