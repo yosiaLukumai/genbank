@@ -312,7 +312,6 @@ interface LogsDataTableProps {
 }
 
 export function LogsDataTable({ data, emptyMessage = "No results found." }: LogsDataTableProps) {
-  console.log(data);
   
   const [page, setPage] = useState(0);
   const pageSize = 10;

@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react"
 import { PageHeader } from "@/components/page-header"
 import { LogsDataTable } from "@/components/logs-data-table"
-import { FridgeSelector } from "@/components/fridge-selector"
-import { DateRangePicker } from "@/components/date-range-picker"
+// import { FridgeSelector } from "@/components/fridge-selector"
+// import { DateRangePicker } from "@/components/date-range-picker"
 import { Button } from "@/components/ui/button"
 import { Download, Loader2, RefreshCcw } from "lucide-react"
 import { getLogs, getFridges } from "@/lib/data"
@@ -15,6 +15,8 @@ import { Separator } from "@/components/ui/separator"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { config } from "@/config/config"
 import { toast } from "sonner"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Logs {
   _id: string;
@@ -60,7 +62,7 @@ export default function LogsPage() {
   useEffect(() => {
     fetchData()
     fetchFridges()
-  }, [])
+  }, [selectedFridgeId])
 
 
   const fetchFridges = async () => {
@@ -87,9 +89,8 @@ export default function LogsPage() {
   }
   const fetchData = async () => {
     try {
-
       setLoading(true)
-      const response = await fetch(`${config.api.baseUrl}/alllogs/table`)
+      const response = await fetch(`${config.api.baseUrl}/alllogs/table?fridgeID=${selectedFridgeId}`)
       const data = await response.json()
       if (data.success) {
         setLoading(false)
@@ -128,9 +129,11 @@ export default function LogsPage() {
     }
   })
 
-  const handleFridgeSelect = (fridgeId: any) => {
-    setSelectedFridgeId(fridgeId === "all" ? null : fridgeId)
-  }
+  // const handleFridgeSelect = (fridgeId: any) => {
+  //   console.log(fridgeId);
+    
+  //   setSelectedFridgeId(fridgeId === "all" ? null : fridgeId)
+  // }
 
   const handleExport = async (format: "csv" | "json") => {
     setExporting(true)
@@ -161,12 +164,37 @@ export default function LogsPage() {
         className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-4 ${isMobile ? "" : "items-center justify-between"}`}
       >
         <div className={`flex ${isMobile ? "flex-col" : "flex-wrap"} gap-2 ${isMobile ? "" : "items-center"}`}>
-          <FridgeSelector
+          {/* <FridgeSelector
             fridges={[{ _id: "all", name: "All Fridges" }, ...fridges]}
             selectedFridgeId={selectedFridgeId || "all"}
             onSelect={handleFridgeSelect}
-          />
-          {/* <DateRangePicker dateRange={dateRange} onDateRangeChange={setDateRange} /> */}
+          /> */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm">
+                Select Fridge
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-40">
+              <div className="flex flex-col space-y-2">
+                <Select
+                  value={selectedFridgeId || "all"}
+                  onValueChange={(value) => setSelectedFridgeId(value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select a fridge" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {fridges.map((f) => (
+                      <SelectItem key={f._id} value={f._id}>
+                        {f.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         <div className={`flex gap-2 ${isMobile ? "mt-2" : ""}`}>
