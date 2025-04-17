@@ -135,7 +135,7 @@ export function FridgesList() {
                   <Thermometer className="mr-1 h-4 w-4" />
                   Temperature
                 </div>
-                <div className="text-xl font-bold">{fridge.latestLog?.roomtemp} °C</div>
+                <div className="text-xl font-bold">{fridge.latestLog?.fridgetemp} °C</div>
               </div>
               <div className="flex flex-col gap-1">
                 <div className="flex items-center text-sm text-muted-foreground">
