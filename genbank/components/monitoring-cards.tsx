@@ -75,7 +75,7 @@ export function MonitoringCards({_id, latestlog, __v, capacity, tempmax, humidit
           <Droplet className="h-4 w-4 text-white" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{latestlog ? latestlog[latestlog?.length-1]?.roomtemp : 0} °C</div>
+          <div className="text-2xl font-bold">{latestlog ? latestlog[latestlog?.length-1]?.roomtemp : 0} %</div>
         </CardContent>
       </Card>
 
