@@ -45,7 +45,6 @@ export default function DashboardPage() {
     try {
       let responses = await fetch(`${config.api.baseUrl}/refrigerators/last/all`)
       let jsonR = await responses.json()
-      console.log(jsonR);
       
       if(jsonR.success) {
         setLoading(false)

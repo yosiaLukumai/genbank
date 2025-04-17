@@ -126,7 +126,7 @@ export function FridgesList() {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <CardDescription>Last updated: {fridge.latestLog?.updatedAt}</CardDescription>
+            <CardDescription>Last updated: {fridge.latestLog?.updatedAt.slice(0, 10)}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
@@ -135,14 +135,14 @@ export function FridgesList() {
                   <Thermometer className="mr-1 h-4 w-4" />
                   Temperature
                 </div>
-                <div className="text-xl font-bold">{fridge.latestLog?.fridgetemp} °C</div>
+                <div className="text-xl font-bold">{fridge.latestLog?.fridgetemp.toFixed(2)} °C</div>
               </div>
               <div className="flex flex-col gap-1">
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Droplet className="mr-1 h-4 w-4" />
                   Humidity
                 </div>
-                <div className="text-xl font-bold">{fridge.latestLog?.fridgehum}%</div>
+                <div className="text-xl font-bold">{fridge.latestLog?.fridgehum.toFixed(2)}%</div>
               </div>
             </div>
           </CardContent>

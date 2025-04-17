@@ -58,13 +58,12 @@ export function MonitoringCards({_id, latestlog, __v, capacity, tempmax, humidit
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card className="bg-[#121212] text-white relative">
-        {/* {roomData.status && getStatusBadge(roomData.status)} */}
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium">Room Temperature</CardTitle>
           <Thermometer className="h-4 w-4 text-white" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{latestlog ? latestlog[latestlog?.length-1]?.roomhum : 0} °C</div>
+          <div className="text-2xl font-bold">{latestlog ? latestlog[0]?.roomtemp.toFixed(2) : 0} °C</div>
         </CardContent>
       </Card>
 
@@ -75,7 +74,7 @@ export function MonitoringCards({_id, latestlog, __v, capacity, tempmax, humidit
           <Droplet className="h-4 w-4 text-white" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{latestlog ? latestlog[latestlog?.length-1]?.roomtemp : 0} %</div>
+          <div className="text-2xl font-bold">{latestlog ? latestlog[0]?.roomhum.toFixed(2) : 0} %</div>
         </CardContent>
       </Card>
 
@@ -88,7 +87,7 @@ export function MonitoringCards({_id, latestlog, __v, capacity, tempmax, humidit
           <Thermometer className="h-4 w-4 text-white" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{latestlog ? latestlog[latestlog?.length-1]?.fridgetemp : 0} °C</div>
+          <div className="text-2xl font-bold">{latestlog ? latestlog[0]?.fridgetemp.toFixed(2) : 0} °C</div>
         </CardContent>
       </Card>
 
@@ -101,7 +100,7 @@ export function MonitoringCards({_id, latestlog, __v, capacity, tempmax, humidit
           <Droplet className="h-4 w-4 text-white" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{latestlog ? latestlog[latestlog?.length-1]?.fridgehum : 0}%</div>
+          <div className="text-2xl font-bold">{latestlog ? latestlog[0]?.fridgehum.toFixed(2) : 0}%</div>
         </CardContent>
       </Card>
     </div>

@@ -8,6 +8,7 @@ import { getFridges } from "@/lib/data"
 import { Loader2 } from "lucide-react"
 import { AddFridgeForm } from "@/components/add-fridge-form"
 import { config } from "@/config/config"
+import { Button } from "@/components/ui/button"
 
 interface Log {
   _id: string;
@@ -149,6 +150,8 @@ export default function FridgeDetailsPage() {
           href: "/dashboard/fridges",
         }}
       />
+
+      <Button >Refresh</Button>
 
       <FridgeDetails fridge={fridge.fridge} logs={fridge.logs}  />
     </div>

@@ -125,7 +125,7 @@ export function FridgeDetails({ fridge, logs }: ApiData) {
           </CardHeader>
           <CardContent>
             <div className="flex items-end justify-between">
-              <div className="text-3xl font-bold">{logs[logs.length - 1].fridgetemp} °C</div>
+              <div className="text-3xl font-bold">{logs[0].fridgetemp.toFixed(2)} °C</div>
               <div className="text-sm text-muted-foreground">
                 Max: {fridge.tempmax} °C
               </div>
@@ -147,7 +147,7 @@ export function FridgeDetails({ fridge, logs }: ApiData) {
           </CardHeader>
           <CardContent>
             <div className="flex items-end justify-between">
-              <div className="text-3xl font-bold">{logs[logs.length - 1].fridgehum}%</div>
+              <div className="text-3xl font-bold">{logs[0].fridgehum.toFixed(2)}%</div>
               <div className="text-sm text-muted-foreground">
                 Max: {fridge.humiditymax}%
               </div>
