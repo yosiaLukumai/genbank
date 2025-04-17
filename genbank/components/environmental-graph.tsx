@@ -104,7 +104,7 @@ export function EnvironmentalGraph({ data, type }: EnvironmentalGraphProps) {
               tickFormatter={(value) => `${value}°C`}
               tick={{ fontSize: 12 }}
               orientation="left"
-              stroke={type === "room" ? "#381D2A" : "#442b48"}
+              stroke={type === "room" ? "#AF2BBF" : "#442b48"}
             />
             <YAxis
               yAxisId="humidity"
@@ -112,15 +112,15 @@ export function EnvironmentalGraph({ data, type }: EnvironmentalGraphProps) {
               tickFormatter={(value) => `${value}%`}
               tick={{ fontSize: 12 }}
               orientation="right"
-              stroke={type === "room" ? "#FCDE9C" : "#442b48"}
+              stroke={type === "room" ? "#AF2BBF" : "#442b48"}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Area
               type="monotone"
               dataKey="temperature"
-              stroke={type === "room" ? "#FCDE9C" : "#442b48"}
-              fill={type === "room" ? "#FCDE9C" : "#442b48"}
+              stroke={type === "room" ? "#5BC8AF" : "#442b48"}
+              fill={type === "room" ? "#5BC8AF" : "#442b48"}
               strokeWidth={2}
               yAxisId="temperature"
               name="Temperature"
@@ -130,8 +130,8 @@ export function EnvironmentalGraph({ data, type }: EnvironmentalGraphProps) {
             <Area
               type="monotone"
               dataKey="humidity"
-              stroke={type === "room" ? "#BA5624" : "#06b6d4"}
-              fill={type === "room" ? "#BA5624" : "#06b6d420"}
+              stroke={type === "room" ? "#AF2BBF" : "#06b6d4"}
+              fill={type === "room" ? "#AF2BBF" : "#06b6d420"}
               strokeWidth={2}
               yAxisId="humidity"
               name="Humidity"
