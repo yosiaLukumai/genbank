@@ -15,7 +15,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Please enter a valid email address"),
-  bio: z.string().optional(),
 })
 
 export function ProfileEditForm({ user, setUser }) {
@@ -27,7 +26,6 @@ export function ProfileEditForm({ user, setUser }) {
     defaultValues: {
       name: user.name,
       email: user.email,
-      bio: user.bio || "",
     },
   })
 
@@ -100,29 +98,11 @@ export function ProfileEditForm({ user, setUser }) {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bio</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Tell us a little about yourself"
-                      className="min-h-[100px] resize-none"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <div className="flex justify-end gap-2">
               <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button className="bg-green-700 hover:bg-green-600" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

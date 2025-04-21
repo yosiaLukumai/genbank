@@ -57,7 +57,7 @@ export function MonitoringCards({_id, latestlog, __v, capacity, tempmax, humidit
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <Card className="bg-[#121212] text-white relative">
+      <Card className="bg-green-700 text-white relative">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium">Room Temperature</CardTitle>
           <Thermometer className="h-4 w-4 text-white" />
@@ -67,7 +67,7 @@ export function MonitoringCards({_id, latestlog, __v, capacity, tempmax, humidit
         </CardContent>
       </Card>
 
-      <Card className="bg-[#121212] text-white relative">
+      <Card className="bg-green-700 text-white relative">
         {/* {roomData.status && getStatusBadge(roomData.status)} */}
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium">Room Humidity</CardTitle>
@@ -78,7 +78,7 @@ export function MonitoringCards({_id, latestlog, __v, capacity, tempmax, humidit
         </CardContent>
       </Card>
 
-      <Card className="bg-[#121212] text-white relative">
+      <Card className="bg-green-700 text-white relative">
         {/* {getStatusBadge(selectedFridge.status)} */}
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium truncate" title={name}>
@@ -91,7 +91,7 @@ export function MonitoringCards({_id, latestlog, __v, capacity, tempmax, humidit
         </CardContent>
       </Card>
 
-      <Card className="bg-[#121212] text-white relative">
+      <Card className="bg-green-700 text-white relative">
         {/* {getStatusBadge(selectedFridge.status)} */}
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-sm font-medium truncate" title={name}>

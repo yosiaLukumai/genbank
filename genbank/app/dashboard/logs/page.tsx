@@ -69,7 +69,6 @@ export default function LogsPage() {
     try {
       let responses = await fetch(`${config.api.baseUrl}/refrigerators/last`)
       let jsonR = await responses.json()
-      console.log(jsonR);
 
       if (jsonR.success) {
         setLoading(false)
@@ -205,7 +204,7 @@ export default function LogsPage() {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button disabled={exporting || filteredLogs.length === 0} className="flex-1 md:flex-none">
+              <Button disabled={exporting || filteredLogs.length === 0} className="flex-1 bg-green-600 hover:bg-green-700 md:flex-none">
                 {exporting ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

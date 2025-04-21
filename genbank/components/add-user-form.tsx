@@ -160,7 +160,7 @@ export function AddUserForm() {
           <Button type="button" variant="outline" onClick={() => router.push("/dashboard/users")}>
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting}>
+          <Button className="bg-green-700 hover:bg-green-600" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Adding..." : "Add User"}
           </Button>
         </div>

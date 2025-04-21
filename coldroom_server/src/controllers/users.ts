@@ -28,6 +28,29 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
 
 }
 
+export const updateUser = async (req: Request, res: Response): Promise<any> => {
+    const { id } = req.params;
+    const { name, email, password, role } = req.body;
+    try {
+        // hash password
+        let hashedPassword = await hashPassword(password);
+        if (!hashedPassword) {
+            return res.json(CreateResponse(false, null, "Failed to hash password"));
+        }
+        const updated = await User.findByIdAndUpdate(id, {
+            name,
+            email,
+            password: hashedPassword,
+            role
+        });
+        if (!updated) {
+            return res.json(CreateResponse(false, null, "Failed to update user"));
+        }
+        return res.json(CreateResponse(true, "User updated successfully"));
+    } catch (error) {
+        return res.json(CreateResponse(false, null, error));
+    }
+}
 
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
     const { email, password } = req.body;
@@ -36,11 +59,11 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
         if (!user) {
             return res.json(CreateResponse(false, null, "User not found"));
         }
-        const isPasswordCorrect = await hashPassword(password);
-        const comparison = await comparePassword(password, isPasswordCorrect);
+        
+        // const isPasswordCorrect = await hashPassword(password);
+        
+        const comparison = await comparePassword(password, user.password);
         if (comparison) {
-            console.log(user);
-            
             return res.json(CreateResponse(true, user));
         } else {
             return res.json(CreateResponse(false, null, "Incorrect password"));
@@ -58,6 +81,19 @@ export const getUsers = async (req: Request, res: Response): Promise<any> => {
             return res.json(CreateResponse(false, null, "Failed to get users"));
         }
         return res.json(CreateResponse(true, users));
+    } catch (error) {
+        return res.json(CreateResponse(false, null, error));
+    }
+}
+
+export const getUser = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { id } = req.params;
+        const user = await User.findById(id);
+        if (!user) {
+            return res.json(CreateResponse(false, null, "Failed to get user"));
+        }
+        return res.json(CreateResponse(true, user));
     } catch (error) {
         return res.json(CreateResponse(false, null, error));
     }

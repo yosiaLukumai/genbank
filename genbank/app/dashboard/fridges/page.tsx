@@ -1,3 +1,4 @@
+"use client"
 import { FridgesList } from "@/components/fridges-list"
 import { PageHeader } from "@/components/page-header"
 

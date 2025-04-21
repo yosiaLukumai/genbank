@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Thermometer, Droplet, MoreVertical, AlertTriangle, CheckCircle } from "lucide-react"
+import { Thermometer, Droplet, MoreVertical, AlertTriangle, CheckCircle, ListMinus, SignalZero, Ruler, QrCode, Tag } from "lucide-react"
 import { toast } from "sonner"
 import { config } from "@/config/config"
 import Loader from "./Loader"
@@ -32,16 +32,23 @@ interface Fridge {
  latestLog: FridgeLastLog | null
 }
 
+interface LocalUser {
+  name: string
+  email: string
+  createdAt: string
+  role: "Admin" | "User" | "Viewer"
+}
+
 export function FridgesList() {
   const [fridgesList, setFridgesList] = useState<Fridge[]>([])
   const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<LocalUser | null>(null)
 
   useEffect(() => {
     const fetchFridges = async () => {
       try {
         let responses = await fetch(`${config.api.baseUrl}/refrigerators/last`)
         let jsonR = await responses.json()
-        console.log(jsonR);
         
         if(jsonR.success) {
           setLoading(false)
@@ -59,6 +66,19 @@ export function FridgesList() {
         })
       }
     }
+
+    async function loadUser() {
+      try {
+        setLoading(true)
+        let user: LocalUser = JSON.parse(localStorage.getItem("user_wvc")!)
+        setUser(user)
+      } catch (error) {
+        console.error("Error loading user data:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadUser()
     fetchFridges()
     setLoading(false)
   }, [])
@@ -94,7 +114,7 @@ export function FridgesList() {
     }
   }
 
-  const handleDelete = (id: string) => {
+   const handleDelete = async (id: string) => {
     setFridgesList(fridgesList.filter((fridge) => fridge._id !== id))
   }
 
@@ -119,10 +139,16 @@ export function FridgesList() {
                   <DropdownMenuItem asChild>
                     <Link href={`/dashboard/fridges/${fridge._id}`}>View Details</Link>
                   </DropdownMenuItem>
-                  {/* <DropdownMenuItem asChild>
+                  {
+                    user?.role === "Admin" &&     <DropdownMenuItem asChild>
                     <Link href={`/dashboard/fridges/${fridge._id}/edit`}>Edit</Link>
-                  </DropdownMenuItem> */}
-                  <DropdownMenuItem onClick={() => handleDelete(fridge._id)}>Delete</DropdownMenuItem>
+                  </DropdownMenuItem>
+                  }
+                  {
+                    user?.role === "Admin" && <DropdownMenuItem onClick={() => handleDelete(fridge._id)}>Delete</DropdownMenuItem>
+                  }
+
+              
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -144,13 +170,31 @@ export function FridgesList() {
                 </div>
                 <div className="text-xl font-bold">{fridge.latestLog?.fridgehum.toFixed(2)}%</div>
               </div>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <ListMinus className="mr-1 h-4 w-4" />
+                  Max Temp
+                </div>
+                <div className="text-xl font-bold">{fridge.tempmax.toFixed(2)} °C</div>
+              </div>
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Ruler className="mr-1 h-4 w-4" />
+                  Max Hum
+                </div>
+                <div className="text-xl font-bold">{fridge.humiditymax.toFixed(2)}%</div>
+              </div>
+
+              <div className="col-span-2 flex items-center">
+                <Tag  className="mr-1" /> <span className="pl-1"> {fridge._id}</span>
+              </div>
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
             {getStatusBadge(fridge)}
-            <Button variant="outline" size="sm" asChild>
+            {/* <Button variant="outline" size="sm" asChild>
               <Link href={`/dashboard/fridges/${fridge._id}`}>View Details</Link>
-            </Button>
+            </Button> */}
           </CardFooter>
         </Card>
       ))}

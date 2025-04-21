@@ -11,16 +11,9 @@ import { MoreVertical, Shield } from "lucide-react"
 import { getUsers } from "@/lib/data"
 import { config } from "@/config/config"
 import { toast } from "sonner"
+import { DeleteResourceDialog } from "./confirmdelete"
 
 
-// "_id": "67fbc8446a2d06978e30c22f",
-// "name": "Yosia Lukumai",
-// "password": "$2b$10$/1ft1tFNqyTa97nGF4PeYOB9vsOmfz2o4JkHz5cCRVB.U/UzdVXCC",
-// "email": "yosialukumai@gmail.com",
-// "role": "Admin",
-// "createdAt": "2025-04-13T14:20:52.051Z",
-// "updatedAt": "2025-04-13T14:20:52.051Z",
-// "__v": 0
 
 interface User{
   _id: string;
@@ -32,6 +25,11 @@ interface User{
 
 export function UsersList() {
   const [usersList, setUsersList] = useState<User[]>([])
+  const [use, setUser] = useState<User | null>(null)
+  const [deleteUser, setdeleteUser] = useState(false)
+  const [deleteUserId, setDeleteUserId] = useState("")
+  const [reload, setReload] = useState(false)
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -52,8 +50,18 @@ export function UsersList() {
       }
     }
 
+    async function loadUser() {
+      try {
+        let user: User = JSON.parse(localStorage.getItem("user_wvc")!)
+        setUser(user)
+      } catch (error) {
+        console.error("Error loading user data:", error)
+      } 
+    }
+
     fetchUsers()
-  }, [])
+    loadUser()
+  }, [reload])
 
   const getRoleBadge = (role: string) => {
     switch (role) {
@@ -73,7 +81,8 @@ export function UsersList() {
   }
 
   const handleDelete = (id: string) => {
-    setUsersList(usersList.filter((user) => user._id !== id))
+    setdeleteUser(true)
+    setDeleteUserId(id)
   }
 
   return (
@@ -97,13 +106,19 @@ export function UsersList() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem asChild>
+                  {/* <DropdownMenuItem asChild>
                     <Link href={`/dashboard/users/${user._id}`}>View Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href={`/dashboard/users/${user._id}/edit`}>Edit</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleDelete(user._id)}>Delete</DropdownMenuItem>
+                  </DropdownMenuItem> */}
+                  {use?.role === "Admin" && 
+                     <DropdownMenuItem asChild>
+                     <Link href={`/dashboard/users/${user._id}/edit`}>Edit</Link>
+                   </DropdownMenuItem>
+                  }
+                  {
+                    use?.role === "Admin" && <DropdownMenuItem onClick={() => handleDelete(user._id)}>Delete</DropdownMenuItem>
+                  }
+               
+                
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -113,12 +128,15 @@ export function UsersList() {
           </CardContent>
           <CardFooter className="flex justify-between">
             {getRoleBadge(user.role)}
-            <Button variant="outline" size="sm" asChild>
+            {/* <Button variant="outline" size="sm" asChild>
               <Link href={`/dashboard/users/${user._id}`}>View Profile</Link>
-            </Button>
+            </Button> */}
           </CardFooter>
         </Card>
       ))}
+
+      <DeleteResourceDialog resourceName="Delete User"  isOpen={deleteUser} onClose={() => {setdeleteUser(false), setReload(!reload)}} apiEndpoint={`/users/delete`} resourceId={deleteUserId} onSuccess={() => {setdeleteUser(false), setReload(!reload)}} />
+
     </div>
   )
 }

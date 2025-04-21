@@ -16,6 +16,7 @@ interface PageHeaderProps {
 }
 
 export function PageHeader({ title, description, action, backLink }: PageHeaderProps) {
+  
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
@@ -28,11 +29,11 @@ export function PageHeader({ title, description, action, backLink }: PageHeaderP
             {backLink.label}
           </Link>
         )}
-        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-green-700">{title}</h1>
         <p className="text-muted-foreground">{description}</p>
       </div>
       {action && (
-        <Button asChild>
+        <Button className="bg-green-700 hover:bg-green-600" asChild>
           <Link href={action.href}>{action.label}</Link>
         </Button>
       )}

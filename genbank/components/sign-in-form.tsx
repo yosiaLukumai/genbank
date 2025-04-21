@@ -65,10 +65,10 @@ export function SignInForm() {
       } else {
         
         toast.error("Login Failed", {
-          description: responseJson.error || responseJson.body == null
+          description: (!responseJson.error || !responseJson.body) == null
             ? "No such User"
             : responseJson.error
-              ? "Failed to login you in"
+              ? "Password incorrect"
               : "Invalid email or password. Please try again."
         })
 
@@ -165,7 +165,7 @@ export function SignInForm() {
           )}
         />
 
-        <Button type="submit" className="w-full h-11 transition-all" disabled={isLoading}>
+        <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 h-11 transition-all" disabled={isLoading}>
           {isLoading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

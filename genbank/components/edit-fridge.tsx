@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -27,14 +27,15 @@ const formSchema = z.object({
   }),
   humiditymax: z.string().refine((val) => !isNaN(Number(val)), {
     message: "Max humidity must be a number.",
-  }),
+  }).optional(),
   tempmax: z.string().refine((val) => !isNaN(Number(val)), {
     message: "Max temperature must be a number.",
-  }),
+  }).optional(),
   refrigerator_type: z.string().optional(),
 });
 
 interface IRefrigerator {
+  _id: string; // Assuming your data has an ID for editing
   name: string;
   capacity: number;
   humiditymax?: number;
@@ -42,27 +43,49 @@ interface IRefrigerator {
   refrigerator_type?: string;
 }
 
-export function AddFridgeForm() {
+interface EditFridgeFormProps {
+  defaultData: IRefrigerator | null;
+}
+
+export function EditFridgeForm({ defaultData }: EditFridgeFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      capacity: "",
-      humiditymax: "15",
-      tempmax: "-15",
-      refrigerator_type: "",
+      name: defaultData?.name || "",
+      capacity: defaultData?.capacity?.toString() || "",
+      humiditymax: defaultData?.humiditymax?.toString() || "15",
+      tempmax: defaultData?.tempmax?.toString() || "-15",
+      refrigerator_type: defaultData?.refrigerator_type || "",
     },
   });
+
+  useEffect(() => {
+    if (defaultData) {
+      form.reset({
+        name: defaultData.name,
+        capacity: defaultData.capacity?.toString() || "10",
+        humiditymax: defaultData.humiditymax?.toString() || "15",
+        tempmax: defaultData.tempmax?.toString() || "-15",
+        refrigerator_type: defaultData.refrigerator_type || "",
+      });
+    }
+  }, [defaultData, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${config.api.baseUrl}/refrigerators`, {
-        method: "POST",
+      if (!defaultData?._id) {
+        toast.error("Error: Fridge ID not found for editing.");
+        return;
+      }
+
+      const response = await fetch(`${config.api.baseUrl}/refrigerators/${defaultData._id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -72,29 +95,30 @@ export function AddFridgeForm() {
           humiditymax: values.humiditymax,
           tempmax: values.tempmax,
           refrigerator_type: values.refrigerator_type,
-        })
-      })
+        }),
+      });
 
       let jsonResponse = await response.json();
       if (jsonResponse.success) {
         setTimeout(() => {
           setIsSubmitting(false);
-          toast.success("Fridge added", {
-            description: `${values.name} has been added successfully.`,
+          toast.success("Fridge updated", {
+            description: `${values.name} has been updated successfully.`,
           });
           router.push("/dashboard/fridges");
         }, 1000);
       } else {
         toast.error("Operation Failure", {
-          description: `Failed to add Fridge`,
+          description: `Failed to update Fridge`,
         });
       }
     } catch (error) {
       toast.error("Error Happened", {
-        description: "An error has occured"
-      })
+        description: "An error has occurred during update."
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-
   }
 
   return (
@@ -189,7 +213,7 @@ export function AddFridgeForm() {
             Cancel
           </Button>
           <Button className="bg-green-700 hover:bg-green-600" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Adding..." : "Add Fridge"}
+            {isSubmitting ? "Updating..." : "Update Fridge"}
           </Button>
         </div>
       </form>

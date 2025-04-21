@@ -45,6 +45,28 @@ export const getFridges = async (req: Request, res: Response): Promise<any> => {
 }
 
 
+
+export const updateFridge = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { id } = req.params;
+        const { name, capacity, humiditymax, tempmax, refrigerator_type } = req.body;
+        const updatedFridge = await Fridge.findByIdAndUpdate(id, {
+            name,
+            capacity: Number(capacity),
+            humiditymax: Number(humiditymax),
+            tempmax: Number(tempmax),
+            refrigerator_type: refrigerator_type,
+        });
+        if (!updatedFridge) {
+            return res.json(CreateResponse(false, null, "Failed to update fridge"));
+        }
+        return res.json(CreateResponse(true, "fridge updated successfully"));
+    } catch (error) {
+        return res.json(CreateResponse(false, null, error));
+    }
+};
+
+
 export const getFridgesWithLatestLogs = async (req: Request, res: Response): Promise<any> => {
     try {
         const fridges = await Fridge.find().lean();
@@ -66,6 +88,19 @@ export const getFridgesWithLatestLogs = async (req: Request, res: Response): Pro
         );
 
         return res.json(CreateResponse(true, fridgesWithLogs));
+    } catch (error) {
+        return res.json(CreateResponse(false, null, error));
+    }
+};
+
+export const deleteFridge = async (req: Request, res: Response): Promise<any> => {
+    try {
+        const { id } = req.params;
+        const fridge = await Fridge.findByIdAndDelete(id);
+        if (!fridge) {
+            return res.json(CreateResponse(false, null, "Failed to delete fridge"));
+        }
+        return res.json(CreateResponse(true, "fridge deleted successfully"));
     } catch (error) {
         return res.json(CreateResponse(false, null, error));
     }

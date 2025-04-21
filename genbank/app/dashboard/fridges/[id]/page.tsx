@@ -47,6 +47,7 @@ export default function FridgeDetailsPage() {
   const [error, setError] = useState(false)
   const [isNewRoute, setIsNewRoute] = useState(params.id === "new")
 
+
   useEffect(() => {
     setIsNewRoute(params.id === "new")
   }, [params.id])
@@ -74,12 +75,12 @@ export default function FridgeDetailsPage() {
     async function loadFridge() {
       try {
         setLoading(true)
-        const fridges = await getFridges(timeRange)
-        const fridgeData = fridges.find((f) => f.id === params.id)
 
-        const response = await fetch(`${config.api.baseUrl}/refrigerators/specific/${params.id}`)
+        const response = await fetch(`${config.api.baseUrl}/refrigerators/specific/yet/${params.id}`)
+        
         const data = await response.json()
         if(data.success) { 
+          
           let dat: ApiData = data.body
           setFridge(dat)
           setError(false)
@@ -91,7 +92,6 @@ export default function FridgeDetailsPage() {
 
      
       } catch (error) {
-        console.error("Error loading fridge data:", error)
         setError(true)
       } finally {
         setLoading(false)
@@ -101,14 +101,12 @@ export default function FridgeDetailsPage() {
     loadFridge()
   }, [params.id, timeRange, router])
 
-  const handleTimeRangeChange = (range: any) => {
-    setTimeRange(range)
-  }
+
 
   if (loading) {
     return (
       <div className="flex h-[80vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-green-600" />
       </div>
     )
   }
@@ -144,14 +142,14 @@ export default function FridgeDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={fridge.fridge.name}
-        description="Detailed monitoring information"
+        description="Temp and Humidity of the fridge"
         backLink={{
           label: "Back to fridges",
           href: "/dashboard/fridges",
         }}
       />
 
-      <Button >Refresh</Button>
+      {/* <Button >Refresh</Button> */}
 
       <FridgeDetails fridge={fridge.fridge} logs={fridge.logs}  />
     </div>

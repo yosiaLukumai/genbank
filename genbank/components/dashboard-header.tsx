@@ -181,7 +181,7 @@ export function DashboardHeader({
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-green-700">Dashboard</h1>
         <p className="text-muted-foreground">
           {loading ? "Loading..." : `Welcome back, ${user?.name}`}
         </p>
