@@ -43,9 +43,12 @@ const router = express_1.default.Router();
 const refrigeratorsRoutes = (app) => {
     router.post('', refrigeratorController.addFridge);
     router.get('', refrigeratorController.getFridges);
-    router.get("/specific/:id", refrigeratorController.getFridges);
+    router.patch("/:id", refrigeratorController.updateFridge);
+    router.get("/specific/:id", refrigeratorController.getSpecificFridge);
+    router.get('/specific/yet/:id', refrigeratorController.getFridges);
     router.get("/last/all", refrigeratorController.getallLast);
     router.get("/last", refrigeratorController.getFridgesWithLatestLogs);
+    router.delete("/:id", refrigeratorController.deleteFridge);
     return app.use('/refrigerators', router);
 };
 exports.refrigeratorsRoutes = refrigeratorsRoutes;

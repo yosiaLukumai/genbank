@@ -43,9 +43,11 @@ const router = express_1.default.Router();
 const userRoutes = (app) => {
     router.post('/create', userController.createUser);
     router.post('/login', userController.loginUser);
+    router.patch('/update/:id', userController.updateUser);
     router.get('/all', userController.getUsers);
+    router.get('/specific/:id', userController.getUser);
     router.delete('/delete/:id', userController.deleteUser);
-    router.put('/update/:id', userController.updatePassword);
+    router.patch('/update/:id', userController.updatePassword);
     return app.use('/users', router);
 };
 exports.userRoutes = userRoutes;

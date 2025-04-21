@@ -19,34 +19,35 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLogsTable = exports.saveLog = void 0;
 const Logs_1 = require("../models/Logs");
 const response_1 = require("../util/response");
-const mongoose_1 = __importDefault(require("mongoose"));
 const querying_1 = require("../util/querying");
 const saveLog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { roomtemp, roomhum, fridgetemp, fridgehum, fridgeID } = req.body;
-        let fridge_id;
-        try {
-            fridge_id = new mongoose_1.default.Types.ObjectId(fridgeID);
+        const { roomtemp, roomhum, fridges } = req.body;
+        // check the length of fridges
+        if (fridges.length === 0) {
+            return res.json((0, response_1.CreateResponse)(false, null, "No fridges found"));
         }
-        catch (idError) {
-            return res.json((0, response_1.CreateResponse)(false, null, "Invalid fridgeID format"));
+        // check the length of fridges
+        if (fridges.length <= 3) {
+            // save but notify a data entry is missing
         }
-        const newLog = yield Logs_1.LogModal.create({
-            roomtemp,
-            roomhum,
-            fridgetemp,
-            fridgehum,
-            fridgeID: fridge_id,
+        // add on each fridge roomtemp and roomhum
+        let newLogs = fridges.map((fridge) => {
+            return {
+                fridgeID: fridge.fridgeID,
+                fridgetemp: fridge.fridgetemp,
+                fridgehum: fridge.fridgehum,
+                roomtemp: roomtemp,
+                roomhum: roomhum,
+            };
         });
-        if (!newLog) {
-            return res.json((0, response_1.CreateResponse)(false, null, "Failed to create log"));
+        const savedAllLogs = yield Logs_1.LogModal.insertMany(newLogs);
+        if (!savedAllLogs) {
+            return res.json((0, response_1.CreateResponse)(false, null, "Failed to save all logs"));
         }
         return res.json((0, response_1.CreateResponse)(true, "log created successfully"));
     }
@@ -61,9 +62,17 @@ const getLogsTable = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         // console.log(pageQuery, limitQuery, search, filter);
         const { page, limit } = (0, querying_1.CreateLimitPage)(pageQuery, limitQuery);
         const skip = (page - 1) * limit;
-        const queryConditions = Object.assign({}, filter);
-        // let add some sort of regex to search
-        const query = Logs_1.LogModal.find(queryConditions).populate("fridgeID", "name _id");
+        // check if in filter there is a fridgeID
+        let queryConditions;
+        if (filter.fridgeID !== "null") {
+            queryConditions = Object.assign({}, filter);
+        }
+        else {
+            // leave all other filter except fridgeID
+            delete filter.fridgeID;
+            queryConditions = Object.assign({}, filter);
+        }
+        const query = Logs_1.LogModal.find(queryConditions).populate("fridgeID", "name _id").sort({ createdAt: -1 });
         const [docs, totalDocs] = yield Promise.all([
             query.skip(skip).limit(limit).exec(),
             Logs_1.LogModal.countDocuments(filter).exec(),

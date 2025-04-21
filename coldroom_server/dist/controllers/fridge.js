@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSpecificFridge = exports.getallLast = exports.getFridgesWithLatestLogs = exports.getFridges = exports.addFridge = void 0;
+exports.getSpecificFridge = exports.getallLast = exports.deleteFridge = exports.getFridgesWithLatestLogs = exports.updateFridge = exports.getFridges = exports.addFridge = void 0;
 const fridge_1 = __importDefault(require("../models/fridge"));
 const response_1 = require("../util/response");
 const Logs_1 = require("../models/Logs");
@@ -58,6 +58,27 @@ const getFridges = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getFridges = getFridges;
+const updateFridge = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const { name, capacity, humiditymax, tempmax, refrigerator_type } = req.body;
+        const updatedFridge = yield fridge_1.default.findByIdAndUpdate(id, {
+            name,
+            capacity: Number(capacity),
+            humiditymax: Number(humiditymax),
+            tempmax: Number(tempmax),
+            refrigerator_type: refrigerator_type,
+        });
+        if (!updatedFridge) {
+            return res.json((0, response_1.CreateResponse)(false, null, "Failed to update fridge"));
+        }
+        return res.json((0, response_1.CreateResponse)(true, "fridge updated successfully"));
+    }
+    catch (error) {
+        return res.json((0, response_1.CreateResponse)(false, null, error));
+    }
+});
+exports.updateFridge = updateFridge;
 const getFridgesWithLatestLogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const fridges = yield fridge_1.default.find().lean();
@@ -78,6 +99,20 @@ const getFridgesWithLatestLogs = (req, res) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.getFridgesWithLatestLogs = getFridgesWithLatestLogs;
+const deleteFridge = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const fridge = yield fridge_1.default.findByIdAndDelete(id);
+        if (!fridge) {
+            return res.json((0, response_1.CreateResponse)(false, null, "Failed to delete fridge"));
+        }
+        return res.json((0, response_1.CreateResponse)(true, "fridge deleted successfully"));
+    }
+    catch (error) {
+        return res.json((0, response_1.CreateResponse)(false, null, error));
+    }
+});
+exports.deleteFridge = deleteFridge;
 const getallLast = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const fridges = yield fridge_1.default.find().lean();

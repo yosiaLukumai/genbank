@@ -1,7 +1,6 @@
 import express from 'express';
 import { userRoutes } from './routes/users';
 import { regionRoutes } from './routes/region';
-import { CuRoutes } from './routes/CU';
 
 import cors from "cors";
 import { refrigeratorsRoutes } from './routes/fridges';

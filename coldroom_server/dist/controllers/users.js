@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePassword = exports.deleteUser = exports.getUsers = exports.loginUser = exports.createUser = void 0;
+exports.updatePassword = exports.deleteUser = exports.getUser = exports.getUsers = exports.loginUser = exports.updateUser = exports.createUser = void 0;
 const Users_1 = __importDefault(require("../models/Users"));
 const response_1 = require("../util/response");
 const passwords_1 = require("../util/passwords");
@@ -42,6 +42,31 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createUser = createUser;
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { name, email, password, role } = req.body;
+    try {
+        // hash password
+        let hashedPassword = yield (0, passwords_1.hashPassword)(password);
+        if (!hashedPassword) {
+            return res.json((0, response_1.CreateResponse)(false, null, "Failed to hash password"));
+        }
+        const updated = yield Users_1.default.findByIdAndUpdate(id, {
+            name,
+            email,
+            password: hashedPassword,
+            role
+        });
+        if (!updated) {
+            return res.json((0, response_1.CreateResponse)(false, null, "Failed to update user"));
+        }
+        return res.json((0, response_1.CreateResponse)(true, "User updated successfully"));
+    }
+    catch (error) {
+        return res.json((0, response_1.CreateResponse)(false, null, error));
+    }
+});
+exports.updateUser = updateUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
@@ -49,10 +74,9 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!user) {
             return res.json((0, response_1.CreateResponse)(false, null, "User not found"));
         }
-        const isPasswordCorrect = yield (0, passwords_1.hashPassword)(password);
-        const comparison = yield (0, passwords_1.comparePassword)(password, isPasswordCorrect);
+        // const isPasswordCorrect = await hashPassword(password);
+        const comparison = yield (0, passwords_1.comparePassword)(password, user.password);
         if (comparison) {
-            console.log(user);
             return res.json((0, response_1.CreateResponse)(true, user));
         }
         else {
@@ -77,6 +101,20 @@ const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUsers = getUsers;
+const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const user = yield Users_1.default.findById(id);
+        if (!user) {
+            return res.json((0, response_1.CreateResponse)(false, null, "Failed to get user"));
+        }
+        return res.json((0, response_1.CreateResponse)(true, user));
+    }
+    catch (error) {
+        return res.json((0, response_1.CreateResponse)(false, null, error));
+    }
+});
+exports.getUser = getUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
