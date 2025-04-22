@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react"
 import { PageHeader } from "@/components/page-header"
 import { LogsDataTable } from "@/components/logs-data-table"
-// import { FridgeSelector } from "@/components/fridge-selector"
-// import { DateRangePicker } from "@/components/date-range-picker"
+
 import { Button } from "@/components/ui/button"
 import { Download, Loader2, RefreshCcw } from "lucide-react"
 import { getLogs, getFridges } from "@/lib/data"
@@ -128,12 +127,6 @@ export default function LogsPage() {
     }
   })
 
-  // const handleFridgeSelect = (fridgeId: any) => {
-  //   console.log(fridgeId);
-    
-  //   setSelectedFridgeId(fridgeId === "all" ? null : fridgeId)
-  // }
-
   const handleExport = async (format: "csv" | "json") => {
     setExporting(true)
 
@@ -163,11 +156,6 @@ export default function LogsPage() {
         className={`flex ${isMobile ? "flex-col" : "flex-row"} gap-4 ${isMobile ? "" : "items-center justify-between"}`}
       >
         <div className={`flex ${isMobile ? "flex-col" : "flex-wrap"} gap-2 ${isMobile ? "" : "items-center"}`}>
-          {/* <FridgeSelector
-            fridges={[{ _id: "all", name: "All Fridges" }, ...fridges]}
-            selectedFridgeId={selectedFridgeId || "all"}
-            onSelect={handleFridgeSelect}
-          /> */}
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm">

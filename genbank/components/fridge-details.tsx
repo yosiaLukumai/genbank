@@ -112,11 +112,11 @@ export function FridgeDetails({ fridge, logs }: ApiData) {
       {/* Top Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
         {/* Temperature Card */}
-        <Card className={`border-l-4 ${isTemperatureInRange ? "border-l-green-500" : "border-l-red-500"}`}>
+        <Card className={`border-l-4 ${isTemperatureInRange ? "border-l-red-500" : "border-l-blue-500"}`}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center justify-between">
               <div className="flex items-center">
-                <Thermometer className="mr-2 h-4 w-4 text-primary" />
+                <Thermometer className="mr-2 h-4 w-4 text-red-500" />
                 Temperature
               </div>
               {/* {getStatusBadge(fridge.status)} */}
@@ -134,7 +134,7 @@ export function FridgeDetails({ fridge, logs }: ApiData) {
         </Card>
 
         {/* Humidity Card */}
-        <Card className={`border-l-4 ${isHumidityInRange ? "border-l-green-500" : "border-l-red-500"}`}>
+        <Card className={`border-l-4 ${isHumidityInRange ? "border-l-red-500" : "border-l-blue-500"}`}>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center justify-between">
               <div className="flex items-center">
@@ -163,7 +163,7 @@ export function FridgeDetails({ fridge, logs }: ApiData) {
      
           <Card>
             <CardHeader>
-              <CardTitle>Temperature Analysis</CardTitle>
+              <CardTitle>Graphical Analysis</CardTitle>
               <CardDescription>Detailed temperature monitoring</CardDescription>
             </CardHeader>
             <CardContent className="h-[400px]">

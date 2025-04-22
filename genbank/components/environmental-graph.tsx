@@ -67,15 +67,15 @@ export function EnvironmentalGraph({ data, type }: EnvironmentalGraphProps) {
 
           {type === "room" && (
             <>
-              <p className="text-sm text-orange-500">Temperature: {payload[0].value.toFixed(1)}°C</p>
-              <p className="text-sm text-red-500">Humidity: {payload[1].value.toFixed(1)}%</p>
+              <p className="text-sm text-green-500">Temperature: {payload[0].value.toFixed(1)}°C</p>
+              <p className="text-sm text-orange-500">Humidity: {payload[1].value.toFixed(1)}%</p>
             </>
           )}
 
           {type === "fridge" && (
             <>
-              <p className="text-sm text-blue-500">Temperature: {payload[0].value.toFixed(1)}°C</p>
-              <p className="text-sm text-cyan-500">Humidity: {payload[1].value.toFixed(1)}%</p>
+              <p className="text-sm text-gray-500">Temperature: {payload[0].value.toFixed(1)}°C</p>
+              <p className="text-sm text-blue-500">Humidity: {payload[1].value.toFixed(1)}%</p>
             </>
           )}
         </Card>
@@ -104,7 +104,7 @@ export function EnvironmentalGraph({ data, type }: EnvironmentalGraphProps) {
               tickFormatter={(value) => `${value}°C`}
               tick={{ fontSize: 12 }}
               orientation="left"
-              stroke={type === "room" ? "#AF2BBF" : "#442b48"}
+              stroke={type === "room" ? "#136F63" : "#435058"}
             />
             <YAxis
               yAxisId="humidity"
@@ -112,15 +112,15 @@ export function EnvironmentalGraph({ data, type }: EnvironmentalGraphProps) {
               tickFormatter={(value) => `${value}%`}
               tick={{ fontSize: 12 }}
               orientation="right"
-              stroke={type === "room" ? "#AF2BBF" : "#442b48"}
+              stroke={type === "room" ? "#136F63" : "#435058"}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             <Area
               type="monotone"
               dataKey="temperature"
-              stroke={type === "room" ? "#5BC8AF" : "#442b48"}
-              fill={type === "room" ? "#5BC8AF" : "#442b48"}
+              stroke={type === "room" ? "#136F63" : "#435058"}
+              fill={type === "room" ? "#136F63" : "#435058"}
               strokeWidth={2}
               yAxisId="temperature"
               name="Temperature"
@@ -130,8 +130,8 @@ export function EnvironmentalGraph({ data, type }: EnvironmentalGraphProps) {
             <Area
               type="monotone"
               dataKey="humidity"
-              stroke={type === "room" ? "#AF2BBF" : "#06b6d4"}
-              fill={type === "room" ? "#AF2BBF" : "#06b6d420"}
+              stroke={type === "room" ? "#F34213" : "#1446A0"}
+              fill={type === "room" ? "#F34213" : "#1446A0"}
               strokeWidth={2}
               yAxisId="humidity"
               name="Humidity"

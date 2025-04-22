@@ -389,10 +389,10 @@ export function TemperatureHumidityGraph({
       return (
         <Card className="p-2 shadow-md border bg-white">
           <p className="text-sm font-medium">{formatTimeLabel(label)}</p>
-          <p className="text-sm text-[#ef4444]">
+          <p className="text-sm text-[#DF2935]">
             Temperature: {payload[0].value.toFixed(1)}°C
           </p>
-          <p className="text-sm text-[#3a86fe]">
+          <p className="text-sm text-[#3772FF]">
             Humidity: {payload[1].value.toFixed(1)}%
           </p>
         </Card>
@@ -435,8 +435,8 @@ export function TemperatureHumidityGraph({
               <Area
                 type="monotone"
                 dataKey="temperature"
-                stroke="#ef4444"
-                fill="#ef444420"
+                stroke="#DF2935"
+                fill="#DF2935"
                 strokeWidth={2}
                 yAxisId="temperature"
                 name="Temperature"
@@ -446,8 +446,8 @@ export function TemperatureHumidityGraph({
               <Area
                 type="monotone"
                 dataKey="humidity"
-                stroke="#3a86fe"
-                fill="#3a86fe20"
+                stroke="#3772FF"
+                fill="#3772FF"
                 strokeWidth={2}
                 yAxisId="humidity"
                 name="Humidity"
@@ -478,8 +478,8 @@ export function TemperatureHumidityGraph({
               <Area
                 type="monotone"
                 dataKey="temperature"
-                stroke="#ef4444"
-                fill="#ef444420"
+                stroke="#DF2935"
+                fill="#DF2935"
                 strokeWidth={2}
                 yAxisId="temperature"
                 name="Temperature"
@@ -489,8 +489,8 @@ export function TemperatureHumidityGraph({
               <Area
                 type="monotone"
                 dataKey="humidity"
-                stroke="#3a86fe"
-                fill="#3a86fe20"
+                stroke="#3772FF"
+                fill="#3772FF"
                 strokeWidth={2}
                 yAxisId="humidity"
                 name="Humidity"
