@@ -164,7 +164,7 @@ export function FridgeDetails({ fridge, logs }: ApiData) {
           <Card>
             <CardHeader>
               <CardTitle>Graphical Analysis</CardTitle>
-              <CardDescription>Detailed temperature monitoring</CardDescription>
+              <CardDescription>Graphical Temperature and Humidity Analysis</CardDescription>
             </CardHeader>
             <CardContent className="h-[400px]">
               <TemperatureHumidityGraph

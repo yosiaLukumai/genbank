@@ -111,7 +111,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle>Room Environment</CardTitle>
-            <CardDescription>Temperature and humidity conditions in the main cold room</CardDescription>
+            <CardDescription>Temperature and humidity conditions</CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (
