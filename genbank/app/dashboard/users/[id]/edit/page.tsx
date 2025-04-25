@@ -26,6 +26,8 @@ interface User {
     name: string;
     email: string;
     role: "Admin" | "Viewer" | "User";
+    sendNotification: boolean;
+    phoneNumber: string;
     createdAt: string;
 }
 
@@ -42,6 +44,10 @@ const formSchema = z.object({
     password: z.string().min(8, {
         message: "Password must be at least 8 characters.",
     }),
+    sendNotification: z.enum(["Yes", "No"], {
+        required_error: "Please select Notification Preference.",
+    }),
+    phoneNumber: z.string().optional(),
 });
 
 interface EditUserFormProps {
@@ -64,6 +70,8 @@ export default function EditUserForm() {
             email: "",
             role: "User",
             password: "",
+            sendNotification: "No",
+            phoneNumber: "",
         },
     });
 
@@ -81,6 +89,8 @@ export default function EditUserForm() {
                             email: userData.email,
                             role: userData.role,
                             password: "",
+                            sendNotification: userData.sendNotification ? "Yes" : "No",
+                            phoneNumber: userData.phoneNumber,
                         });
                     } else {
                         toast.error("Failed to load user data.");
@@ -115,6 +125,8 @@ export default function EditUserForm() {
                     email: values.email,
                     role: values.role,
                     password: values.password,
+                    sendNotification: values.sendNotification === "Yes" ? true : false,
+                    phoneNumber: values.phoneNumber,
                 }),
             });
 
@@ -181,8 +193,49 @@ export default function EditUserForm() {
                         />
                     </div>
 
+
                     <div className="grid gap-4 md:grid-cols-2">
-                    <FormField
+                        <FormField
+                            control={form.control}
+                            name="sendNotification"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Notification Preference</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={(field.value)}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Send Notification" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            <SelectItem value="Yes">Yes</SelectItem>
+                                            <SelectItem value="No">No</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <FormDescription>This contols if the User will be receiving Email or SMS Notification when thresholds are not met.</FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="phoneNumber"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Phone</FormLabel>
+                                    <FormControl>
+                                        <Input type="number" placeholder="0762127425" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                        <FormField
                             control={form.control}
                             name="password"
                             render={({ field }) => (

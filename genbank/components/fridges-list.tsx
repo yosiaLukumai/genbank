@@ -23,13 +23,13 @@ interface FridgeLastLog {
 }
 
 interface Fridge {
- _id: string;
- name: string;
- capacity: number;
- humiditymax: number;
- tempmax: number;
- refrigerator_type: string;
- latestLog: FridgeLastLog | null
+  _id: string;
+  name: string;
+  capacity: number;
+  humiditymax: number;
+  tempmax: number;
+  refrigerator_type: string;
+  latestLog: FridgeLastLog | null
 }
 
 interface LocalUser {
@@ -49,11 +49,11 @@ export function FridgesList() {
       try {
         let responses = await fetch(`${config.api.baseUrl}/refrigerators/last`)
         let jsonR = await responses.json()
-        
-        if(jsonR.success) {
+
+        if (jsonR.success) {
           setLoading(false)
           setFridgesList(jsonR.body)
-        }else {
+        } else {
           setLoading(false)
           toast.error("Error Happened", {
             description: jsonR.error || jsonR.body || "Failed to fetch the Fridges"
@@ -85,10 +85,10 @@ export function FridgesList() {
 
   const getStatusBadge = (fridge: Fridge) => {
     let status: any;
-    if(fridge.latestLog) {
-    status= ((fridge.latestLog?.fridgehum > fridge.humiditymax) || (fridge.latestLog.fridgetemp > fridge.tempmax)) ? "warning": "normal";
-    }else {
-    status = "critical"
+    if (fridge.latestLog) {
+      status = ((fridge.latestLog?.fridgehum > fridge.humiditymax) || (fridge.latestLog.fridgetemp > fridge.tempmax)) ? "warning" : "normal";
+    } else {
+      status = "critical"
     }
     switch (status) {
       case "normal":
@@ -114,14 +114,28 @@ export function FridgesList() {
     }
   }
 
-   const handleDelete = async (id: string) => {
-    setFridgesList(fridgesList.filter((fridge) => fridge._id !== id))
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await fetch(`${config.api.baseUrl}/refrigerators/${id}`, {
+        method: "DELETE",
+      })
+      let jsonR = await response.json()
+      if (jsonR.success) {
+        toast.success("Fridge deleted successfully")
+        setFridgesList(fridgesList.filter((fridge) => fridge._id !== id))
+
+      } else {
+        toast.error("Error deleting fridge")
+      }
+    } catch (error) {
+      toast.error("Error deleting fridge")
+    }
   }
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {
-        loading && <div className="w-full h-full">  <Loader message="Loading fridges"/> </div>
+        loading && <div className="w-full h-full">  <Loader message="Loading fridges" /> </div>
       }
       {fridgesList.map((fridge) => (
         <Card key={fridge._id} className="transition-all hover:shadow-md">
@@ -140,15 +154,15 @@ export function FridgesList() {
                     <Link href={`/dashboard/fridges/${fridge._id}`}>View Details</Link>
                   </DropdownMenuItem>
                   {
-                    user?.role === "Admin" &&     <DropdownMenuItem asChild>
-                    <Link href={`/dashboard/fridges/${fridge._id}/edit`}>Edit</Link>
-                  </DropdownMenuItem>
+                    user?.role === "Admin" && <DropdownMenuItem asChild>
+                      <Link href={`/dashboard/fridges/${fridge._id}/edit`}>Edit</Link>
+                    </DropdownMenuItem>
                   }
                   {
                     user?.role === "Admin" && <DropdownMenuItem onClick={() => handleDelete(fridge._id)}>Delete</DropdownMenuItem>
                   }
 
-              
+
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -186,7 +200,7 @@ export function FridgesList() {
               </div>
 
               <div className="col-span-2 flex items-center">
-                <Tag  className="mr-1" /> <span className="pl-1"> {fridge._id}</span>
+                <Tag className="mr-1" /> <span className="pl-1"> {fridge._id}</span>
               </div>
             </div>
           </CardContent>

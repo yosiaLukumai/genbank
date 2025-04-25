@@ -48,6 +48,7 @@ export default function LogsPage() {
   const [logs, setLogs] = useState<Logs[]>([])
   const [fridges, setFridges] = useState<Fridge[]>([])
   const [selectedFridgeId, setSelectedFridgeId] = useState<string | null>(null)
+  const [selectedCustom, setSelectedCustom] = useState<string | null>(null)
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: new Date(new Date().setDate(new Date().getDate() - 7)),
     to: new Date(),
@@ -61,7 +62,7 @@ export default function LogsPage() {
   useEffect(() => {
     fetchData()
     fetchFridges()
-  }, [selectedFridgeId])
+  }, [selectedFridgeId, selectedCustom])
 
 
   const fetchFridges = async () => {
@@ -88,7 +89,7 @@ export default function LogsPage() {
   const fetchData = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`${config.api.baseUrl}/alllogs/table?fridgeID=${selectedFridgeId}`)
+      const response = await fetch(`${config.api.baseUrl}/alllogs/table?fridgeID=${selectedFridgeId}&date=${selectedCustom}`)
       const data = await response.json()
       if (data.success) {
         setLoading(false)
@@ -180,6 +181,24 @@ export default function LogsPage() {
                   </SelectContent>
                 </Select>
               </div>
+            </PopoverContent>
+          </Popover>
+          <Popover>
+          <PopoverTrigger asChild>
+              <Button variant="outline" size="sm">
+                Select Date
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="">
+              <Select value={selectedCustom ? selectedCustom : undefined} onValueChange={(value) => setSelectedCustom(value)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a date" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="week">Last week</SelectItem>
+                  <SelectItem value="month">Last Month</SelectItem>  
+                </SelectContent>
+              </Select>
             </PopoverContent>
           </Popover>
         </div>

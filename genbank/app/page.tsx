@@ -12,7 +12,7 @@ export default function SignInPage() {
         <div className="w-full max-w-md space-y-8">
           <div className="space-y-2 text-center">
             <h1 className="text-3xl font-bold tracking-tighter text-green-600 sm:text-4xl">World Vegetable Center</h1>
-            <p className="text-muted-foreground">GenBank Monitoring System</p>
+            <p className="text-muted-foreground">GeneBank Monitoring System</p>
           </div>
 
           <SignInForm />

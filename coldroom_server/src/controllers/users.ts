@@ -4,7 +4,7 @@ import { CreateResponse } from '../util/response';
 import { comparePassword, hashPassword } from '../util/passwords';
 
 export const createUser = async (req: Request, res: Response): Promise<any> => {
-    const { email, name, password, role } = req.body;
+    const { email, name, password, role, sendNotification, phoneNumber } = req.body;
     // has password first
     try {
         let hashedPassword = await hashPassword(password);
@@ -15,7 +15,9 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
             email,
             name,
             password: hashedPassword,
-            role
+            role,
+            sendNotification,
+            phoneNumber,
         });
         if (saved) {
             return res.json(CreateResponse(true, "User created.."))
@@ -30,7 +32,7 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
 
 export const updateUser = async (req: Request, res: Response): Promise<any> => {
     const { id } = req.params;
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, sendNotification, phoneNumber } = req.body;
     try {
         // hash password
         let hashedPassword = await hashPassword(password);
@@ -41,7 +43,9 @@ export const updateUser = async (req: Request, res: Response): Promise<any> => {
             name,
             email,
             password: hashedPassword,
-            role
+            role,
+            sendNotification,
+            phoneNumber,
         });
         if (!updated) {
             return res.json(CreateResponse(false, null, "Failed to update user"));

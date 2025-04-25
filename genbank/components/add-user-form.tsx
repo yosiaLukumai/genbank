@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
 import { config } from "@/config/config"
+import { Checkbox } from "./ui/checkbox"
 
 
 const formSchema = z.object({
@@ -26,6 +27,10 @@ const formSchema = z.object({
   role: z.enum(["Admin", "User", "Viewer"], {
     required_error: "Please select a role.",
   }),
+  sendNotification: z.enum(["Yes", "No"], {
+    required_error: "Please select Notification Preference.",
+  }),
+  phoneNumber: z.string().optional(),
 })
 
 export function AddUserForm() {
@@ -39,6 +44,8 @@ export function AddUserForm() {
       email: "",
       password: "",
       role: "User",
+      phoneNumber: "",
+      sendNotification: "No",
     },
   })
 
@@ -46,9 +53,7 @@ export function AddUserForm() {
 
 
     setIsSubmitting(true)
-    // use the api to create the user
     try {
-      // Simulate API call
       const response = await fetch(`${config.api.baseUrl}/users/create`, {
         method: "POST",
         headers: {
@@ -59,6 +64,8 @@ export function AddUserForm() {
           email: values.email,
           password: values.password,
           role: values.role,
+          sendNotification: values.sendNotification === "Yes" ? true : false,
+          phoneNumber: values.phoneNumber,
         })
       })
       const responseJson = await response.json()
@@ -79,7 +86,7 @@ export function AddUserForm() {
       toast.error("Failed to add user", error.message || "Failed to add user")
     }
 
-  
+
   }
 
   return (
@@ -108,6 +115,46 @@ export function AddUserForm() {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="john@example.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="sendNotification"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Notification Preference</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={(field.value)}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Send Notification" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Yes">Yes</SelectItem>
+                    <SelectItem value="No">No</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>This contols if the User will be receiving Email or SMS Notification when thresholds are not met.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="0762127425" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

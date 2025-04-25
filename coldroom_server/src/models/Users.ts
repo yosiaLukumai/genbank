@@ -4,6 +4,8 @@ export interface User {
     name: string;
     password: string;
     email: string;
+    sendNotification?: boolean,
+    phoneNumber?: string;
     role: "Admin" | "Viewer" | "User";
     createdAt: Date;
     updatedAt: Date;
@@ -15,6 +17,8 @@ const userSchema = new Schema<User>(
         password: { type: String, required: true },
         email: { type: String, required: true },
         role: { type: String, required: true },
+        phoneNumber: { type: String, required: false },
+        sendNotification: { type: Boolean, default: false }
     },
     {
         timestamps: true,

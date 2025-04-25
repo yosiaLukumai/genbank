@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Loader2, Shield, Mail, Calendar } from "lucide-react"
+import { Loader2, Shield, Mail, Calendar, AlertCircle } from "lucide-react"
 import { getCurrentUser } from "@/lib/data"
 import { PasswordChangeForm } from "@/components/password-change-form"
 import { ProfileEditForm } from "@/components/profile-edit-form"
@@ -16,6 +16,8 @@ interface LocalUser {
   email: string
   createdAt: string
   role: "Admin" | "User" | "Viewer"
+  phoneNumber: string
+  sendNotification: boolean
 }
 
 export function ProfileView() {
@@ -94,6 +96,10 @@ export function ProfileView() {
                 <Calendar className="mr-1 h-4 w-4" />
                 Member since {user.createdAt.slice(0, 10)}
               </div>
+              <div className="flex items-center text-muted-foreground">
+                <AlertCircle className="mr-1 h-4 w-4" />
+                {user.sendNotification ? "Yes" : "No"}
+              </div>
             </div>
           </div>
         </CardContent>
@@ -131,6 +137,10 @@ export function ProfileView() {
                     <Badge variant="outline" className="bg-green-500/10 text-green-600">
                       Active
                     </Badge>
+                  </div>
+                  <div className="space-y-1.5">
+                    <h3 className="text-sm font-medium text-muted-foreground">Phone Number</h3>
+                    <p className="text-base">{user.phoneNumber}</p>
                   </div>
                 </div>
              
