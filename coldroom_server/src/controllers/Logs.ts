@@ -7,6 +7,7 @@ import { FridgeAlertState } from "../models/fridgeAlertState";
 import { send_sms } from "../services/sendsms";
 import User from "../models/Users";
 import { send_email } from "../services/sendemail";
+import { log } from "node:console";
 
 interface fridgeData {
     fridgeID: string;
@@ -133,15 +134,112 @@ export const saveLog = async (req: Request, res: Response): Promise<any> => {
 }
 
 
+// export const getLogsTable = async (req: Request, res: Response): Promise<any> => {
+//     try {
+
+//         const { page: pageQuery, limit: limitQuery, ...filter } = req.query;
+
+//         const { page, limit } = CreateLimitPage(pageQuery, limitQuery);
+//         const skip = (page - 1) * limit;
+//         // check if in filter there is a fridgeID
+//         // let queryConditions: Record<string, any>;
+//         let queryConditions: Record<string, any> = { ...filter };
+
+//         if (filter.fridgeID !== "null") {
+//             queryConditions = { ...filter };
+//         } else {
+//             // leave all other filter except fridgeID
+//             delete filter.fridgeID;
+//             queryConditions = { ...filter };
+//         }
+
+        
+
+//         // if (filter.date !== "null" && filter.date) {
+//         //     const date = new Date();
+//         //     console.log(filter.date, "jjejej");
+//         //     if (filter.date?.includes("week")) {
+//         //         date.setDate(date.getDate() - 7);
+//         //     } else {
+//         //         date.setDate(date.getDate() - 30);
+//         //     }
+//         //     queryConditions.createdAt = { $gte: date };
+//         // } else {
+//         //     delete filter.date;
+//         //     queryConditions = { ...filter };
+//         // }
+
+//         // console.log(filter.startDate, filter.endDate, filter)
+        
+//         // if(filter.startDate && filter.endDate){
+//         //     console.log("runned");
+            
+//         //     queryConditions.createdAt = { $gte: filter.startDate, $lte: filter.endDate };
+//         // }else if(filter.startDate){
+//         //     console.log("rn");
+            
+//         //     queryConditions.createdAt = { $gte: filter.startDate };
+//         // }else if(filter.endDate){
+//         //     console.log("djhs");
+            
+//         //     queryConditions.createdAt = { $lte: filter.endDate };
+//         // }else {
+//         //     console.log("del`");
+            
+//         //     delete filter.startDate;
+//         //     delete filter.endDate;
+//         //     queryConditions = { ...filter };
+//         // }
+
+//         if (filter.date && filter.date !== "null") {
+//             const date = new Date();
+//             if (filter.date.includes("week")) {
+//                 date.setDate(date.getDate() - 7);
+//             } else {
+//                 date.setDate(date.getDate() - 30);
+//             }
+//             queryConditions.createdAt = { $gte: date };
+//         } else if (filter.startDate || filter.endDate) {
+//             if (filter.startDate && filter.endDate) {
+//                 queryConditions.createdAt = { $gte: new Date(filter.startDate), $lte: new Date(filter.endDate) };
+//             } else if (filter.startDate) {
+//                 queryConditions.createdAt = { $gte: new Date(filter.startDate) };
+//             } else if (filter.endDate) {
+//                 queryConditions.createdAt = { $lte: new Date(filter.endDate) };
+//             }
+//         }
+        
+
+
+
+
+//         const query = LogModal.find(queryConditions).populate("fridgeID", "name _id").sort({ createdAt: -1 });
+
+//         const [docs, totalDocs] = await Promise.all([
+//             query.skip(skip).limit(limit).exec(),
+//             LogModal.countDocuments(filter as Record<string, any>).exec(),
+//         ]);
+//         const data = CreatePaginatedOutput(limit, totalDocs, page, docs);
+
+//         if (!data) {
+//             return res.json(CreateResponse(false, null, "Failed to get logs"));
+//         }
+//         return res.json(CreateResponse(true, data));
+//     } catch (error) {
+//         return res.json(CreateResponse(false, null, error));
+//     }
+// };
+
+
+
 export const getLogsTable = async (req: Request, res: Response): Promise<any> => {
     try {
-
         const { page: pageQuery, limit: limitQuery, ...filter } = req.query;
 
         const { page, limit } = CreateLimitPage(pageQuery, limitQuery);
         const skip = (page - 1) * limit;
-        // check if in filter there is a fridgeID
-        let queryConditions: Record<string, any>;
+
+        let queryConditions: Record<string, any> = { ...filter };
 
         if (filter.fridgeID !== "null") {
             queryConditions = { ...filter };
@@ -150,26 +248,60 @@ export const getLogsTable = async (req: Request, res: Response): Promise<any> =>
             delete filter.fridgeID;
             queryConditions = { ...filter };
         }
+        
+        const dateFilter = filter.date as string | undefined;
+        const startDate = filter.startDate as string | undefined;
+        const endDate = filter.endDate as string | undefined;
 
-        if (filter.date !== "null" && !filter.date) {
+        
+
+        if (dateFilter && dateFilter !== "null") {
             const date = new Date();
-            if (filter.date?.includes("week")) {
+            if (dateFilter.includes("week")) {
                 date.setDate(date.getDate() - 7);
             } else {
                 date.setDate(date.getDate() - 30);
             }
+            delete queryConditions.date;
             queryConditions.createdAt = { $gte: date };
-        } else {
+        }else {
             delete filter.date;
             queryConditions = { ...filter };
         }
 
-        const query = LogModal.find(queryConditions).populate("fridgeID", "name _id").sort({ createdAt: -1 });
+        console.log(queryConditions);
+        
+        
+       if (startDate || endDate) {
+        delete queryConditions.date;
+            if (startDate && endDate) {
+                queryConditions.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
+            } else if (startDate) {
+                queryConditions.createdAt = { $gte: new Date(startDate) };
+            } else if (endDate) {
+                queryConditions.createdAt = { $lte: new Date(endDate) };
+            }
+            delete filter.startDate;
+            delete filter.endDate;
+            delete queryConditions.startDate;
+            delete queryConditions.endDate;
+        }else {
+            
+            delete filter.startDate;
+            delete filter.endDate;
+        }
+        
+
+        
+        const query = LogModal.find(queryConditions)
+            .populate("fridgeID", "name _id")
+            .sort({ createdAt: -1 });
 
         const [docs, totalDocs] = await Promise.all([
             query.skip(skip).limit(limit).exec(),
             LogModal.countDocuments(filter as Record<string, any>).exec(),
         ]);
+
         const data = CreatePaginatedOutput(limit, totalDocs, page, docs);
 
         if (!data) {
@@ -177,6 +309,7 @@ export const getLogsTable = async (req: Request, res: Response): Promise<any> =>
         }
         return res.json(CreateResponse(true, data));
     } catch (error) {
+        
         return res.json(CreateResponse(false, null, error));
     }
 };

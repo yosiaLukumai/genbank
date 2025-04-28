@@ -6,6 +6,8 @@ const userSchema = new mongoose_1.Schema({
     password: { type: String, required: true },
     email: { type: String, required: true },
     role: { type: String, required: true },
+    phoneNumber: { type: String, required: false },
+    sendNotification: { type: Boolean, default: false }
 }, {
     timestamps: true,
 });

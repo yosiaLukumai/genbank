@@ -19,7 +19,7 @@ const config: Config = {
 
 const queryConfig: QueryConfig = {
   defaultPage: Number(process.env.DEFAULT_PAGE) || 1,
-  defaultLimit: Number(process.env.DEFAULT_LIMIT) || 10,
+  defaultLimit: Number(process.env.DEFAULT_LIMIT) || 30,
 };
 
 export default config;

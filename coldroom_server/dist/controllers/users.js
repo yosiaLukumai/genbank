@@ -17,7 +17,7 @@ const Users_1 = __importDefault(require("../models/Users"));
 const response_1 = require("../util/response");
 const passwords_1 = require("../util/passwords");
 const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, name, password, role } = req.body;
+    const { email, name, password, role, sendNotification, phoneNumber } = req.body;
     // has password first
     try {
         let hashedPassword = yield (0, passwords_1.hashPassword)(password);
@@ -28,7 +28,9 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             email,
             name,
             password: hashedPassword,
-            role
+            role,
+            sendNotification,
+            phoneNumber,
         });
         if (saved) {
             return res.json((0, response_1.CreateResponse)(true, "User created.."));
@@ -44,7 +46,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.createUser = createUser;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, sendNotification, phoneNumber } = req.body;
     try {
         // hash password
         let hashedPassword = yield (0, passwords_1.hashPassword)(password);
@@ -55,7 +57,9 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             name,
             email,
             password: hashedPassword,
-            role
+            role,
+            sendNotification,
+            phoneNumber,
         });
         if (!updated) {
             return res.json((0, response_1.CreateResponse)(false, null, "Failed to update user"));
