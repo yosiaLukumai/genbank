@@ -376,21 +376,7 @@ export default function LogsPage() {
     }
   }
 
-  const filteredLogs = logs?.filter((log) => {
-    try {
-      const logDate = new Date(log.createdAt.replace(" ", "T"))
-      const isInDateRange = logDate >= dateRange.from && logDate <= dateRange.to
-
-      if (selectedFridgeId && log.fridgeID._id !== selectedFridgeId) {
-        return false
-      }
-
-      return isInDateRange
-    } catch (error) {
-      console.error("Error filtering log:", error)
-      return false
-    }
-  })
+  const filteredLogs = logs;
 
   const handleExport = async (format: "csv" | "json") => {
     setExporting(true)
