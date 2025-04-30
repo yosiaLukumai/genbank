@@ -75,56 +75,156 @@ export const saveLog = async (req: Request, res: Response): Promise<any> => {
             return res.json(CreateResponse(false, null, "Failed to save all logs"));
         }
 
+        // setImmediate(async () => {
+        //     savedAllLogs.forEach(async (log) => {
+        //         const fridge = await Refrigerator.findById(log.fridgeID);
+        //         if (!fridge || !fridge.tempmax || !fridge.humiditymax || !log.roomtemp || !log.roomhum || !log.fridgetemp || !log.fridgehum)
+        //             return;
+        //         const alertState = await FridgeAlertState.findOne({ fridgeID: log.fridgeID }) || new FridgeAlertState({ fridgeID: log.fridgeID });
+        //         try {
+        //             if ((log.fridgetemp < fridge.tempmax || log.fridgehum > fridge.humiditymax) && !alertState.alertActive) {
+
+        //                 // get all users with notifications enabled
+        //                 const users = await User.find({ sendNotification: true });
+
+        //                 // email and phone number arrays
+        //                 const emails: string[] = [];
+        //                 const phoneNumbers: { phone: string }[] = [];
+        //                 users.forEach((user) => {
+        //                     if (user.email) {
+        //                         emails.push(user.email);
+        //                     }
+        //                     if (user.phoneNumber) {
+        //                         phoneNumbers.push({
+        //                             phone: user.phoneNumber,
+        //                         });
+        //                     }
+        //                 });
+
+        //                 console.log(emails);
+        //                 console.log(phoneNumbers);
+
+        //                 if (emails.length > 0) {
+        //                     // send email notification
+        //                     await send_email(emails, `<h1>Fridge ${fridge.name} has exceeded temperature or humidity limits</h1><p>Please check the fridge temperature and humidity immediately.</p>`);
+        //                     // await send_email(emails, emails.length + " new logs found for " + fridge.name);
+        //                 }
+        //                 if (phoneNumbers.length > 0) {
+        //                     // send sms notification
+        //                     send_sms(`Fridge with Label ${fridge.name} has exceeded temperature or humidity limits, please check immediately.`, phoneNumbers);
+        //                 }
+
+        //                 alertState.alertActive = true;
+        //                 alertState.lastNotifiedAt = new Date();
+        //                 await alertState.save();
+
+
+        //             }
+        //             if ((log.fridgetemp <= fridge.tempmax && log.fridgehum <= fridge.humiditymax) && alertState.alertActive) {
+        //                 alertState.alertActive = false;
+        //                 await alertState.save();
+        //             }
+        //         } catch (error) {
+        //             console.log("Error processing alert:", error);
+        //         }
+        //     });
+        // });
+
+
         setImmediate(async () => {
-            savedAllLogs.forEach(async (log) => {
-                const fridge = await Refrigerator.findById(log.fridgeID);
-                if (!fridge || !fridge.tempmax || !fridge.humiditymax || !log.roomtemp || !log.roomhum || !log.fridgetemp || !log.fridgehum)
-                    return;
-                const alertState = await FridgeAlertState.findOne({ fridgeID: log.fridgeID }) || new FridgeAlertState({ fridgeID: log.fridgeID });
+            let alerts: { label: string, message: string, sms: string }[] = [];
+            const processingPromises = savedAllLogs.map(async (log) => {
                 try {
+                    const fridge = await Refrigerator.findById(log.fridgeID);
+                    if (!fridge || !fridge.tempmax || !fridge.humiditymax || !log.roomtemp || !log.roomhum || !log.fridgetemp || !log.fridgehum) {
+                        return;
+                    }
+                    const alertState = await FridgeAlertState.findOne({ fridgeID: log.fridgeID }) || new FridgeAlertState({ fridgeID: log.fridgeID });
+                    // console.log(`Fridge: ${fridge.name}, Log Temp: ${log.fridgetemp}, Max Temp: ${fridge.tempmax}`);
+                    // console.log("One: ", log.fridgetemp < fridge.tempmax);
+                    // console.log('Two: ', log.fridgehum > fridge.humiditymax);
+
+                    // if ((log.fridgetemp < fridge.tempmax || log.fridgehum > fridge.humiditymax) && !alertState.alertActive) {
                     if ((log.fridgetemp < fridge.tempmax || log.fridgehum > fridge.humiditymax) && !alertState.alertActive) {
-                   
-                        // get all users with notifications enabled
-                        const users = await User.find({ sendNotification: true });
-
-                        // email and phone number arrays
-                        const emails: string[] = [];
-                        const phoneNumbers: { phone: string }[] = [];
-                        users.forEach((user) => {
-                            if (user.email) {
-                                emails.push(user.email);
-                            }
-                            if (user.phoneNumber) {
-                                phoneNumbers.push({
-                                    phone: user.phoneNumber,
-                                });
-                            }
-                        });
-                        
-                        if (emails.length > 0) {
-                            // send email notification
-                            await send_email(emails, `<h1>Fridge ${fridge.name} has exceeded temperature or humidity limits</h1><p>Please check the fridge temperature and humidity immediately.</p>`);
-                            // await send_email(emails, emails.length + " new logs found for " + fridge.name);
-                        }
-                        if (phoneNumbers.length > 0) {
-                            // send sms notification
-                            send_sms(`Fridge with Label ${fridge.name} has exceeded temperature or humidity limits, please check immediately.`, phoneNumbers);
+                        // check which notifications and push them to the alerts array
+                        if (log.fridgetemp < fridge.tempmax) {
+                            alerts.push({
+                                label: fridge.name,
+                                sms: "Temperature has exceeded threshold",
+                                message: `has exceeded temperature limits. Current temperature: ${log.fridgetemp}°C, Maximum temperature: ${fridge.tempmax}°C`
+                            })
                         }
 
+                        if (log.fridgehum > fridge.humiditymax) {
+                            alerts.push({
+                                label: fridge.name,
+                                sms: "Humidity has exceeded threshold",
+                                message: `has exceeded humidity limits. Current humidity: ${log.fridgehum}%, Maximum humidity: ${fridge.humiditymax}%`
+                            })
+                        }
                         alertState.alertActive = true;
                         alertState.lastNotifiedAt = new Date();
                         await alertState.save();
-
-
-                    }
-                    if ((log.fridgetemp <= fridge.tempmax && log.fridgehum <= fridge.humiditymax) && alertState.alertActive) {
+                    } 
+                    else if ((log.fridgetemp >= fridge.tempmax && log.fridgehum <= fridge.humiditymax) && alertState.alertActive) {
                         alertState.alertActive = false;
                         await alertState.save();
                     }
                 } catch (error) {
-                    console.log("Error processing alert:", error);
+                    console.log(`Error processing alert for fridge ID ${log.fridgeID}:`, error);
+                    // Potentially handle the error in a way that doesn't stop other logs
                 }
             });
+
+            // Send notifications
+
+
+            try {
+                await Promise.all(processingPromises);
+                if (alerts.length > 0) {
+                    const users = await User.find({ sendNotification: true });
+                    const emails: string[] = [];
+                    const phoneNumbers: { phone: string }[] = [];
+                    users.forEach((user) => {
+                        if (user.email) {
+                            emails.push(user.email);
+                        }
+                        if (user.phoneNumber) {
+                            phoneNumbers.push({
+                                phone: user.phoneNumber,
+                            });
+                        }
+                    });
+
+                    // console.log(emails);
+                    // console.log(phoneNumbers);
+
+                    // construct message
+                    let longMessage = "";
+                    alerts.map((alert, index) => {
+                        longMessage += `${index + 0}. <h1> ${alert.label}-${alert.message}</h1><p>Please check the fridge temperature and humidity immediately.</p> \n`;
+                        return longMessage;
+                    })
+
+                    if (emails.length > 0) {
+                        await send_email(emails, longMessage);
+                    }
+                    // sms notification
+                    let sms = ""
+                    alerts.map((alert) => { 
+                        sms += `${alert.label}-${alert.sms},`;
+                        return sms;
+                    })
+                    
+                    if (phoneNumbers.length > 0) {
+                        send_sms(sms, phoneNumbers);
+                    }
+                }
+                console.log("All logs processed.");
+                // Any code that needs to run after all logs are processed can go here
+            } catch (error) {
+                console.error("An error occurred during log processing:", error);
+            }
         });
 
         return res.json(CreateResponse(true, "log created successfully"));
@@ -153,7 +253,7 @@ export const saveLog = async (req: Request, res: Response): Promise<any> => {
 //             queryConditions = { ...filter };
 //         }
 
-        
+
 
 //         // if (filter.date !== "null" && filter.date) {
 //         //     const date = new Date();
@@ -170,22 +270,22 @@ export const saveLog = async (req: Request, res: Response): Promise<any> => {
 //         // }
 
 //         // console.log(filter.startDate, filter.endDate, filter)
-        
+
 //         // if(filter.startDate && filter.endDate){
 //         //     console.log("runned");
-            
+
 //         //     queryConditions.createdAt = { $gte: filter.startDate, $lte: filter.endDate };
 //         // }else if(filter.startDate){
 //         //     console.log("rn");
-            
+
 //         //     queryConditions.createdAt = { $gte: filter.startDate };
 //         // }else if(filter.endDate){
 //         //     console.log("djhs");
-            
+
 //         //     queryConditions.createdAt = { $lte: filter.endDate };
 //         // }else {
 //         //     console.log("del`");
-            
+
 //         //     delete filter.startDate;
 //         //     delete filter.endDate;
 //         //     queryConditions = { ...filter };
@@ -208,7 +308,7 @@ export const saveLog = async (req: Request, res: Response): Promise<any> => {
 //                 queryConditions.createdAt = { $lte: new Date(filter.endDate) };
 //             }
 //         }
-        
+
 
 
 
@@ -248,12 +348,12 @@ export const getLogsTable = async (req: Request, res: Response): Promise<any> =>
             delete filter.fridgeID;
             queryConditions = { ...filter };
         }
-        
+
         const dateFilter = filter.date as string | undefined;
         const startDate = filter.startDate as string | undefined;
         const endDate = filter.endDate as string | undefined;
 
-        
+
 
         if (dateFilter && dateFilter !== "null") {
             const date = new Date();
@@ -264,16 +364,15 @@ export const getLogsTable = async (req: Request, res: Response): Promise<any> =>
             }
             delete queryConditions.date;
             queryConditions.createdAt = { $gte: date };
-        }else {
+        } else {
             delete filter.date;
             queryConditions = { ...filter };
         }
 
-        console.log(queryConditions);
-        
-        
-       if (startDate || endDate) {
-        delete queryConditions.date;
+
+
+        if (startDate || endDate) {
+            delete queryConditions.date;
             if (startDate && endDate) {
                 queryConditions.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
             } else if (startDate) {
@@ -285,14 +384,14 @@ export const getLogsTable = async (req: Request, res: Response): Promise<any> =>
             delete filter.endDate;
             delete queryConditions.startDate;
             delete queryConditions.endDate;
-        }else {
-            
+        } else {
+
             delete filter.startDate;
             delete filter.endDate;
         }
-        
 
-        
+
+
         const query = LogModal.find(queryConditions)
             .populate("fridgeID", "name _id")
             .sort({ createdAt: -1 });
@@ -309,7 +408,7 @@ export const getLogsTable = async (req: Request, res: Response): Promise<any> =>
         }
         return res.json(CreateResponse(true, data));
     } catch (error) {
-        
+
         return res.json(CreateResponse(false, null, error));
     }
 };

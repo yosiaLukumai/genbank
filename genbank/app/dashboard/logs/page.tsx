@@ -353,7 +353,7 @@ export default function LogsPage() {
   const fetchData = async () => {
     try {
       setLoading(true)
-      const response = await fetch(`${config.api.baseUrl}/alllogs/table?fridgeID=${selectedFridgeId}&date=${selectedCustom == "custom_date" ? null: selectedCustom}&limit=50${urlDateLimit()}`)
+      const response = await fetch(`${config.api.baseUrl}/alllogs/table?fridgeID=${selectedFridgeId}&date=${selectedCustom == "custom_date" ? null: selectedCustom}&limit=100${urlDateLimit()}`)
       const data = await response.json()
       if (data.success) {
         setLoading(false)

@@ -8,7 +8,7 @@ const resend = new Resend(process.env.RESEND_API_KEY!);
 export const send_email = async (emails: string[], message: string): Promise<any> => {
     try {
         const response = await resend.emails.send({
-            from: "alert@resend.dev",
+            from: "genebank@vortan.io",
             to: emails,
             subject: "Alert Threshold Compromised",
             html: message,
