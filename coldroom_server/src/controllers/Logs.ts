@@ -202,7 +202,7 @@ export const saveLog = async (req: Request, res: Response): Promise<any> => {
                     // construct message
                     let longMessage = "";
                     alerts.map((alert, index) => {
-                        longMessage += `${index + 0}. <h1> ${alert.label}-${alert.message}</h1><p>Please check the fridge temperature and humidity immediately.</p> \n`;
+                        longMessage += `<h1> ${alert.label}-${alert.message}</h1><p>Please check the fridge temperature and humidity immediately.</p> \n`;
                         return longMessage;
                     })
 
