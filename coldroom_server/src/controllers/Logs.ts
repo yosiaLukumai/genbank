@@ -145,9 +145,9 @@ export const saveLog = async (req: Request, res: Response): Promise<any> => {
                     // console.log('Two: ', log.fridgehum > fridge.humiditymax);
 
                     // if ((log.fridgetemp < fridge.tempmax || log.fridgehum > fridge.humiditymax) && !alertState.alertActive) {
-                    if ((log.fridgetemp < fridge.tempmax || log.fridgehum > fridge.humiditymax) && !alertState.alertActive) {
+                    if ((log.fridgetemp > fridge.tempmax || log.fridgehum > fridge.humiditymax) && !alertState.alertActive) {
                         // check which notifications and push them to the alerts array
-                        if (log.fridgetemp < fridge.tempmax) {
+                        if (log.fridgetemp > fridge.tempmax) {
                             alerts.push({
                                 label: fridge.name,
                                 sms: "Temperature has exceeded threshold",
@@ -166,7 +166,7 @@ export const saveLog = async (req: Request, res: Response): Promise<any> => {
                         alertState.lastNotifiedAt = new Date();
                         await alertState.save();
                     } 
-                    else if ((log.fridgetemp >= fridge.tempmax && log.fridgehum <= fridge.humiditymax) && alertState.alertActive) {
+                    else if ((log.fridgetemp <= fridge.tempmax && log.fridgehum <= fridge.humiditymax) && alertState.alertActive) {
                         alertState.alertActive = false;
                         await alertState.save();
                     }
