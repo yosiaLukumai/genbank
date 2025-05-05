@@ -30,7 +30,7 @@ export default function FridgesPage() {
       <PageHeader
         title="Fridges"
         description="Manage your coldroom fridges"
-        action={user?.role === "Admin" ? { label: "Add Fridge", href: "/dashboard/fridges/new" } : undefined}
+        action={(user?.role === "Admin" || user?.role == "User") ? { label: "Add Fridge", href: "/dashboard/fridges/new" } : undefined}
       />
       <FridgesList />
     </div>
