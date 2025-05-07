@@ -35,7 +35,7 @@ const navItems = [
     title: "Add Fridge",
     href: "/dashboard/fridges/new",
     icon: PlusCircle,
-    allowedRoles: ["Admin"],
+    allowedRoles: ["Admin", "User"],
   },
   {
     title: "Users",
