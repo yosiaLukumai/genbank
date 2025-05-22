@@ -145,7 +145,7 @@ export function EnvironmentalDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center">
               <Thermometer className="mr-2 h-4 w-4 text-blue-500" />
-              Fridge Temperature
+              Freezer Temperature
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -165,7 +165,7 @@ export function EnvironmentalDashboard() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center">
               <Droplet className="mr-2 h-4 w-4 text-cyan-500" />
-              Fridge Humidity
+              Freezer Humidity
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -212,8 +212,8 @@ export function EnvironmentalDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-start justify-between">
             <div>
-              <CardTitle>Fridge Environment</CardTitle>
-              <CardDescription>Temperature and humidity conditions in selected fridge</CardDescription>
+              <CardTitle>Freezer Environment</CardTitle>
+              <CardDescription>Temperature and humidity conditions in selected freezer</CardDescription>
             </div>
             {!loading && (
               <div className="ml-auto">
@@ -248,7 +248,7 @@ export function EnvironmentalDashboard() {
               />
             ) : (
               <div className="h-[300px] flex items-center justify-center">
-                <p className="text-muted-foreground">No fridge selected</p>
+                <p className="text-muted-foreground">No freezer selected</p>
               </div>
             )}
           </CardContent>
@@ -267,7 +267,7 @@ export function EnvironmentalDashboard() {
           <Card>
             <CardHeader>
               <CardTitle>Combined Environmental Data</CardTitle>
-              <CardDescription>Compare room and fridge environmental conditions</CardDescription>
+              <CardDescription>Compare room and freezer environmental conditions</CardDescription>
             </CardHeader>
             <CardContent className="h-[400px]">
               {loading ? (
@@ -295,7 +295,7 @@ export function EnvironmentalDashboard() {
           <Card>
             <CardHeader>
               <CardTitle>Temperature Comparison</CardTitle>
-              <CardDescription>Compare room and fridge temperature trends</CardDescription>
+              <CardDescription>Compare room and freezer temperature trends</CardDescription>
             </CardHeader>
             <CardContent className="h-[400px]">
               {loading ? (
@@ -323,7 +323,7 @@ export function EnvironmentalDashboard() {
           <Card>
             <CardHeader>
               <CardTitle>Humidity Comparison</CardTitle>
-              <CardDescription>Compare room and fridge humidity trends</CardDescription>
+              <CardDescription>Compare room and freezer humidity trends</CardDescription>
             </CardHeader>
             <CardContent className="h-[400px]">
               {loading ? (

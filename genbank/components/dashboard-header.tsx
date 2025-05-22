@@ -191,7 +191,7 @@ export function DashboardHeader({
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm">
-                Select Fridge
+                Select Freezer
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-80">
@@ -201,7 +201,7 @@ export function DashboardHeader({
                   onValueChange={(value) => setSelectedFridgeId(value)}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a fridge" />
+                    <SelectValue placeholder="Select a freezer" />
                   </SelectTrigger>
                   <SelectContent>
                     {fridge.map((f) => (

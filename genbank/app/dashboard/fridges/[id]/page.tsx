@@ -57,8 +57,8 @@ export default function FridgeDetailsPage() {
     return (
       <div className="space-y-6">
         <PageHeader
-          title="Add New Fridge"
-          description="Add a new fridge to monitor"
+          title="Add New Freezer"
+          description="Add a new freezer to monitor"
           backLink={{
             label: "Back to fridges",
             href: "/dashboard/fridges",
@@ -115,10 +115,10 @@ export default function FridgeDetailsPage() {
     return (
       <div className="space-y-6">
         <PageHeader
-          title="Fridge Not Found"
-          description="The requested fridge could not be found"
+          title="Freezer Not Found"
+          description="The requested Freezer could not be found"
           backLink={{
-            label: "Back to fridges",
+            label: "Back to freezer",
             href: "/dashboard/fridges",
           }}
         />
@@ -142,9 +142,9 @@ export default function FridgeDetailsPage() {
     <div className="space-y-6">
       <PageHeader
         title={fridge.fridge.name}
-        description="Temp and Humidity of the fridge"
+        description="Temp and Humidity of the freezer"
         backLink={{
-          label: "Back to fridges",
+          label: "Back to freezer",
           href: "/dashboard/fridges",
         }}
       />

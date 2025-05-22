@@ -25,15 +25,15 @@ export function FridgeSelector({ fridges, selectedFridgeId, onSelect }: FridgeSe
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="outline" role="combobox" aria-expanded={open} className="w-full sm:w-[250px] justify-between">
-          {selectedFridge ? selectedFridge.name : "Select fridge..."}
+          {selectedFridge ? selectedFridge.name : "Select freezer..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full sm:w-[250px] p-0">
         <Command>
-          <CommandInput placeholder="Search fridge..." />
+          <CommandInput placeholder="Search freezer..." />
           <CommandList>
-            <CommandEmpty>No fridge found.</CommandEmpty>
+            <CommandEmpty>No freezer found.</CommandEmpty>
             <CommandGroup>
               {fridges.map((fridge) => (
                 <CommandItem

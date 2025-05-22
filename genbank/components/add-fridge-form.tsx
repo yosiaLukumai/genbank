@@ -20,7 +20,7 @@ import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Fridge name must be at least 2 characters.",
+    message: "Freezer name must be at least 2 characters.",
   }),
   capacity: z.string().refine((val) => !isNaN(Number(val)), {
     message: "Capacity must be a number.",
@@ -79,14 +79,14 @@ export function AddFridgeForm() {
       if (jsonResponse.success) {
         setTimeout(() => {
           setIsSubmitting(false);
-          toast.success("Fridge added", {
+          toast.success("Freezer added", {
             description: `${values.name} has been added successfully.`,
           });
           router.push("/dashboard/fridges");
         }, 1000);
       } else {
         toast.error("Operation Failure", {
-          description: `Failed to add Fridge`,
+          description: `Failed to add Freezer`,
         });
       }
     } catch (error) {
@@ -108,7 +108,7 @@ export function AddFridgeForm() {
               <FormItem>
                 <FormLabel>Fridge Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Main Storage Fridge" {...field} />
+                  <Input placeholder="Main Storage Freezer" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -189,7 +189,7 @@ export function AddFridgeForm() {
             Cancel
           </Button>
           <Button className="bg-green-700 hover:bg-green-600" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Adding..." : "Add Fridge"}
+            {isSubmitting ? "Adding..." : "Add Freezer"}
           </Button>
         </div>
       </form>

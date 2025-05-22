@@ -28,9 +28,9 @@ export default function FridgesPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Fridges"
-        description="Manage your coldroom fridges"
-        action={(user?.role === "Admin" || user?.role == "User") ? { label: "Add Fridge", href: "/dashboard/fridges/new" } : undefined}
+        title="Freezers"
+        description="Manage your coldroom freezer"
+        action={(user?.role === "Admin" || user?.role == "User") ? { label: "Add Freezer", href: "/dashboard/fridges/new" } : undefined}
       />
       <FridgesList />
     </div>

@@ -20,7 +20,7 @@ import { toast } from "sonner";
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Fridge name must be at least 2 characters.",
+    message: "Freezer name must be at least 2 characters.",
   }),
   capacity: z.string().refine((val) => !isNaN(Number(val)), {
     message: "Capacity must be a number.",
@@ -80,7 +80,7 @@ export function EditFridgeForm({ defaultData }: EditFridgeFormProps) {
 
     try {
       if (!defaultData?._id) {
-        toast.error("Error: Fridge ID not found for editing.");
+        toast.error("Error: Freezer ID not found for editing.");
         return;
       }
 
@@ -102,14 +102,14 @@ export function EditFridgeForm({ defaultData }: EditFridgeFormProps) {
       if (jsonResponse.success) {
         setTimeout(() => {
           setIsSubmitting(false);
-          toast.success("Fridge updated", {
+          toast.success("Freezer updated", {
             description: `${values.name} has been updated successfully.`,
           });
           router.push("/dashboard/fridges");
         }, 1000);
       } else {
         toast.error("Operation Failure", {
-          description: `Failed to update Fridge`,
+          description: `Failed to update Freezer`,
         });
       }
     } catch (error) {
@@ -130,9 +130,9 @@ export function EditFridgeForm({ defaultData }: EditFridgeFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Fridge Name</FormLabel>
+                <FormLabel>Freezer Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Main Storage Fridge" {...field} />
+                  <Input placeholder="Main Storage Freezer" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -213,7 +213,7 @@ export function EditFridgeForm({ defaultData }: EditFridgeFormProps) {
             Cancel
           </Button>
           <Button className="bg-green-700 hover:bg-green-600" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Updating..." : "Update Fridge"}
+            {isSubmitting ? "Updating..." : "Update Freezer"}
           </Button>
         </div>
       </form>

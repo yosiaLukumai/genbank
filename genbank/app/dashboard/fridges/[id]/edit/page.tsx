@@ -67,10 +67,10 @@ export default function EditFridgePage() {
     return (
       <div className="space-y-6">
         <PageHeader
-          title="Fridge Not Found"
-          description="The requested fridge could not be found"
+          title="Freezer Not Found"
+          description="The requested Freezer could not be found"
           backLink={{
-            label: "Back to fridges",
+            label: "Back to freezer",
             href: "/dashboard/fridges",
           }}
         />
@@ -87,9 +87,9 @@ export default function EditFridgePage() {
     <div className="space-y-6">
       <PageHeader
         title={`Edit ${fridge.name}`}
-        description="Modify fridge details and specifications"
+        description="Modify freezer details and specifications"
         backLink={{
-          label: "Back to fridge details",
+          label: "Back to freezer details",
           href: `/dashboard/fridges/${fridge._id}`,
         }}
       />

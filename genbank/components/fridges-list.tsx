@@ -56,13 +56,13 @@ export function FridgesList() {
         } else {
           setLoading(false)
           toast.error("Error Happened", {
-            description: jsonR.error || jsonR.body || "Failed to fetch the Fridges"
+            description: jsonR.error || jsonR.body || "Failed to fetch the Freezers"
           })
         }
       } catch (error) {
         setLoading(false)
         toast.error("Operation Error", {
-          description: "Failed to fetch the Fridges"
+          description: "Failed to fetch the Freezers"
         })
       }
     }
@@ -121,21 +121,21 @@ export function FridgesList() {
       })
       let jsonR = await response.json()
       if (jsonR.success) {
-        toast.success("Fridge deleted successfully")
+        toast.success("Freezer deleted successfully")
         setFridgesList(fridgesList.filter((fridge) => fridge._id !== id))
 
       } else {
-        toast.error("Error deleting fridge")
+        toast.error("Error deleting freezer")
       }
     } catch (error) {
-      toast.error("Error deleting fridge")
+      toast.error("Error deleting freezer")
     }
   }
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {
-        loading && <div className="w-full h-full">  <Loader message="Loading fridges" /> </div>
+        loading && <div className="w-full h-full">  <Loader message="Loading freezers" /> </div>
       }
       {fridgesList.map((fridge) => (
         <Card key={fridge._id} className="transition-all hover:shadow-md">

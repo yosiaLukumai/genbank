@@ -151,7 +151,7 @@ export default function DashboardPage() {
               />
             ) : (
               <div className="h-[300px] flex items-center justify-center">
-                <p className="text-muted-foreground">No fridge selected</p>
+                <p className="text-muted-foreground">No Freezer selected</p>
               </div>
             )}
           </CardContent>

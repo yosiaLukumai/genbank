@@ -12,7 +12,7 @@ export function DeviceTypeFilter({ value, onChange }: DeviceTypeFilterProps) {
   const deviceTypes = [
     { label: "All Devices", value: "all" },
     { label: "Room Only", value: "room" },
-    { label: "Fridges Only", value: "fridge" },
+    { label: "Freezer Only", value: "freezer" },
   ]
 
   return (

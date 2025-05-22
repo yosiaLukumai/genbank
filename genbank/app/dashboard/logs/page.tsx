@@ -340,13 +340,13 @@ export default function LogsPage() {
       } else {
         setLoading(false)
         toast.error("Error Happened", {
-          description: jsonR.error || jsonR.body || "Failed to fetch the Fridges"
+          description: jsonR.error || jsonR.body || "Failed to fetch the freezers"
         })
       }
     } catch (error) {
       setLoading(false)
       toast.error("Operation Error", {
-        description: "Failed to fetch the Fridges"
+        description: "Failed to fetch the freezers"
       })
     }
   }
@@ -417,7 +417,7 @@ export default function LogsPage() {
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" size="sm">
-                Select Fridge
+                Select Freezer
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-40">
@@ -427,7 +427,7 @@ export default function LogsPage() {
                   onValueChange={(value) => setSelectedFridgeId(value)}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select a fridge" />
+                    <SelectValue placeholder="Select a freezer" />
                   </SelectTrigger>
                   <SelectContent>
                     {fridges.map((f) => (
@@ -507,7 +507,7 @@ export default function LogsPage() {
             data={logs}
             emptyMessage={
               selectedFridgeId
-                ? "No logs found for the selected fridge in this date range."
+                ? "No logs found for the selected freezer in this date range."
                 : "No logs found for the selected date range."
             }
           />
