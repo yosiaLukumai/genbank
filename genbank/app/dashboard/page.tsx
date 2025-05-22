@@ -132,8 +132,8 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Fridge Environment</CardTitle>
-            <CardDescription>Temperature and humidity conditions in selected fridge</CardDescription>
+            <CardTitle>Freezer Environment</CardTitle>
+            <CardDescription>Temperature and humidity conditions in selected freezer</CardDescription>
           </CardHeader>
           <CardContent>
             {loading ? (

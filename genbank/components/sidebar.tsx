@@ -26,13 +26,13 @@ const navItems = [
     allowedRoles: ["Admin", "User", "Viewer"],
   },
   {
-    title: "Fridges",
+    title: "Freezers",
     href: "/dashboard/fridges",
     icon: Thermometer,
     allowedRoles: ["Admin", "User", "Viewer"],
   },
   {
-    title: "Add Fridge",
+    title: "Add Freezer",
     href: "/dashboard/fridges/new",
     icon: PlusCircle,
     allowedRoles: ["Admin", "User"],

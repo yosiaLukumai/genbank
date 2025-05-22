@@ -106,7 +106,7 @@ export function AddFridgeForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Fridge Name</FormLabel>
+                <FormLabel>Freezer Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Main Storage Freezer" {...field} />
                 </FormControl>
